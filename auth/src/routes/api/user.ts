@@ -1,7 +1,9 @@
 import express, { Router, Request, Response } from "express";
 import { check, validationResult } from "express-validator";
 import gravatar from "gravatar";
+import jwt from "jsonwebtoken";
 import User from "../../models/User";
+import config from "config";
 // const config = require("config");
 
 const router = Router();
@@ -40,7 +42,18 @@ router.post(
             });
             user = new User({ name, email, avatar, password });
             await user.save();
-            res.status(200).json(user);
+            const payload = {
+                id: user.id
+            };
+            const jwtConfig = {
+                expiresIn: 360000
+            };
+            jwt.sign(payload, config.get("jwtSecret"), jwtConfig, (err, token) => {
+                if (err) {
+                    throw err;
+                }
+                res.json({ token });
+            });
         } catch (error) {
             console.error(error.message);
             res.status(500).send("Server error");

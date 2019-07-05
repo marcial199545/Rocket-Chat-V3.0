@@ -1,6 +1,7 @@
 import express, { Application, Request, Response } from "express";
 // import bcrypt from "bcryptjs";
 import userRoutes from "./routes/api/user";
+import authRoutes from "./routes/api/auth";
 import connectDB from "./db";
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
@@ -14,6 +15,7 @@ app.get("/", (req: Request, res: Response) => {
     res.send("hello from auth service");
 });
 app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 // SECTION Database connection
 connectDB();
