@@ -4,6 +4,7 @@ import { check, validationResult } from "express-validator";
 import User from "../../models/User";
 import jwt from "jsonwebtoken";
 import config from "config";
+import auth from "../../middleware/auth";
 
 const router = Router();
 
@@ -27,11 +28,13 @@ router.post(
         try {
             let user: any = await User.findOne({ email });
             if (!user) {
+                res.clearCookie("token");
                 return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
             }
             //NOTE comparing the password with the encrypted one
             const isMatch = await bcrypt.compare(password, user.password);
             if (!isMatch) {
+                res.clearCookie("token");
                 return res.status(400).json({ errors: [{ msg: "Invalid Credentials" }] });
             }
             //NOTE use json web token
@@ -47,7 +50,8 @@ router.post(
                 if (err) {
                     throw err;
                 }
-                res.json({ token });
+                res.cookie("token", token, { httpOnly: true });
+                res.send("cookie sent");
             });
         } catch (error) {
             console.error(error.message);
@@ -56,4 +60,16 @@ router.post(
     }
 );
 
+// @route   GET api/auth
+// @desc    Authenticate user
+// @access  Public
+router.get("/", auth, async (req: any, res: any) => {
+    try {
+        const user = await User.findById(req.user.id).select("-password");
+        res.json(user);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+});
 export default router;
