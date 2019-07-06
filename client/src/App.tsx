@@ -1,20 +1,36 @@
-import React from "react";
-import logo from "./logo.svg";
+// eslint-disable-next-line
+import React, { Fragment, useEffect } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+// NOTE STYLES
 import "./App.css";
+
+//NOTE REDUX
+import { Provider } from "react-redux";
+import store from "./store";
+
+// NOTE COMPONENTS
+import Navbar from "./components/layout/Navbar";
+import Alert from "./components/layout/Alert";
+import Landing from "./components/layout/Landing";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
 
 const App: React.FC = () => {
     return (
-        <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.tsx</code> and save to reload.
-                </p>
-                <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-                    Learn React
-                </a>
-            </header>
-        </div>
+        <Provider store={store}>
+            <Router>
+                <Fragment>
+                    <Navbar />
+                    <Route exact path="/" component={Landing} />
+                    <Alert />
+                    <Switch>
+                        <Route exact path="/register" component={Register} />
+                        <Route exact path="/login" component={Login} />
+                    </Switch>
+                </Fragment>
+            </Router>
+        </Provider>
     );
 };
 
