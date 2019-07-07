@@ -56,9 +56,15 @@ export const login = (email: string, password: string) => async (dispatch: any) 
     }
 };
 // NOTE Logout User
-export const logout = () => (dispatch: any) => {
-    dispatch({ type: CLEAR_PROFILE });
-    dispatch({ type: LOGOUT });
+export const logout = () => async (dispatch: any) => {
+    try {
+        const res = await axios.delete("/api/auth");
+        console.log("TCL: logout -> res", res);
+        dispatch({ type: CLEAR_PROFILE });
+        dispatch({ type: LOGOUT });
+    } catch (error) {
+        console.log(error);
+    }
 };
 //NOTE Load User
 export const loadUser = () => async (dispatch: any) => {

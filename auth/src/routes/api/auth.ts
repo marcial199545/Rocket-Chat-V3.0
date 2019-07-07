@@ -71,4 +71,11 @@ router.get("/", auth, async (req: any, res: any) => {
         res.status(500).send("Server error");
     }
 });
+// @route   DELETE api/auth
+// @desc    remove token
+// @access  Public
+router.delete("/", async (req, res) => {
+    res.clearCookie("token");
+    return res.status(200).send("cookie removed");
+});
 export default router;
