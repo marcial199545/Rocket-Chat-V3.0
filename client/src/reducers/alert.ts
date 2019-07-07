@@ -6,7 +6,6 @@ export default function(state = initialState, action: any) {
     switch (type) {
         case SET_ALERT:
             return [...state, payload];
-
         case REMOVE_ALERT:
             return state.filter((alert: any) => alert.id !== payload);
         default:

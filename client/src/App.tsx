@@ -8,15 +8,21 @@ import "./App.css";
 //NOTE REDUX
 import { Provider } from "react-redux";
 import store from "./store";
-
 // NOTE COMPONENTS
+import Dashboard from "./components/dashboard/Dashboard";
 import Navbar from "./components/layout/Navbar";
 import Alert from "./components/layout/Alert";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
+import PrivateRoute from "./components/routing/PrivateRoute";
+import { loadUser } from "./actions/auth";
 
-const App: React.FC = () => {
+const App = () => {
+    useEffect(() => {
+        //@ts-ignore
+        store.dispatch(loadUser());
+    }, []);
     return (
         <Provider store={store}>
             <Router>
@@ -27,6 +33,7 @@ const App: React.FC = () => {
                     <Switch>
                         <Route exact path="/register" component={Register} />
                         <Route exact path="/login" component={Login} />
+                        <PrivateRoute exact path="/dashboard" component={Dashboard} />
                     </Switch>
                 </Fragment>
             </Router>

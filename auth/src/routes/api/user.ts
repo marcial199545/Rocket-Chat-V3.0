@@ -17,7 +17,7 @@ router.post(
         check("name", "Name field is required")
             .not()
             .isEmpty(),
-        check("email", "Please add an email in the orrect format").isEmail(),
+        check("email", "Please add an email in the correct format").isEmail(),
         check("password", "Please enter a password with 6 or more characters").isLength({
             min: 6
         })
@@ -33,6 +33,7 @@ router.post(
             //NOTE fetch user by email to see if it exists
             let user = await User.findOne({ email });
             if (user) {
+                res.clearCookie("token");
                 return res.status(400).json({ errors: [{ msg: "Email provided is already in use" }] });
             }
             const avatar = gravatar.url(email, {
@@ -52,7 +53,8 @@ router.post(
                 if (err) {
                     throw err;
                 }
-                res.json({ token });
+                res.cookie("token", token, { httpOnly: true });
+                res.send("cookie sent");
             });
         } catch (error) {
             console.error(error.message);

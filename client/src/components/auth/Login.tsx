@@ -1,9 +1,11 @@
 import React, { Fragment, useState } from "react";
 // eslint-disable-next-line
 import { Link, Redirect } from "react-router-dom";
-// import PropTypes from 'prop-types'
+import { login } from "../../actions/auth";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }: { login: any; isAuthenticated: boolean }) => {
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -12,9 +14,11 @@ const Login = () => {
     const onChange = (e: any) => setFormData({ ...formData, [e.target.name]: e.target.value });
     const onSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("submited");
-        // login(email, password);
+        login(email, password);
     };
+    if (isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    }
     return (
         <Fragment>
             <section className="container">
@@ -55,8 +59,14 @@ const Login = () => {
     );
 };
 
-// Login.propTypes = {
+Login.propTypes = {
+    login: PropTypes.func.isRequired
+};
+const mapStateToProps = (state: any) => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
 
-// }
-
-export default Login;
+export default connect(
+    mapStateToProps,
+    { login }
+)(Login);

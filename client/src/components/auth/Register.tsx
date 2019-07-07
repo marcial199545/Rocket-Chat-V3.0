@@ -1,11 +1,19 @@
 import React, { Fragment, useState, FormEvent, ChangeEvent } from "react";
-// eslint-disable-next-line
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-import { setAlert } from "../../actions/alert";
 import PropTypes from "prop-types";
+import { setAlert } from "../../actions/alert";
+import { registerUser } from "../../actions/auth";
 
-const Register = () => {
+const Register = ({
+    setAlert,
+    registerUser,
+    isAuthenticated
+}: {
+    setAlert: any;
+    registerUser: any;
+    isAuthenticated: boolean;
+}) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -18,13 +26,15 @@ const Register = () => {
     const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (password !== password2) {
-            setAlert("Passwords do not match", "danger", 2000);
-            console.log("passwords dont match");
+            setAlert("Passwords do not match", "danger");
         } else {
-            console.log("submitted");
-            // register({ name, email, password });
+            console.log(`success`);
+            registerUser({ name, email, password });
         }
     };
+    if (isAuthenticated) {
+        return <Redirect to="/dashboard" />;
+    }
     return (
         <Fragment>
             <section className="container">
@@ -89,13 +99,15 @@ const Register = () => {
 };
 
 Register.propTypes = {
-    setAlert: PropTypes.func.isRequired
+    setAlert: PropTypes.func.isRequired,
+    registerUser: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired
 };
-// const mapStateToProps = (state:any) => ({
-
-// })
+const mapStateToProps = (state: any) => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
 
 export default connect(
-    null,
-    { setAlert }
+    mapStateToProps,
+    { setAlert, registerUser }
 )(Register);
