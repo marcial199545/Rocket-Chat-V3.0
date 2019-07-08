@@ -16,6 +16,7 @@ import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/routing/PrivateRoute";
+import Page404 from "./components/layout/Page404";
 import { loadUser } from "./actions/auth";
 
 const App = () => {
@@ -34,6 +35,7 @@ const App = () => {
                         <Route exact path="/register" component={Register} />
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                        <Route component={Page404} />
                     </Switch>
                 </Fragment>
             </Router>

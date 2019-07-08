@@ -18,7 +18,6 @@ body {
     font-size: 1rem;
     line-height: 1.6;
     background-color: #fff;
-    color: #333;
 }
 
 a {
@@ -33,7 +32,6 @@ ul {
 img {
     width: 100%;
 }
-
 /* Utilities */
 .container {
     max-width: 1100px;
@@ -128,7 +126,18 @@ img {
 .my-3 {
     margin: 3rem 0;
 }
-
+.jumbotron {
+    padding: 2rem 1rem;
+    margin-bottom: 2rem;
+    background-color: var(--dark-color);
+    border-radius: 0.3rem;
+    color: var(--danger-color);
+}
+.jumbotron-fluid {
+    padding-right: 0;
+    padding-left: 0;
+    border-radius: 0;
+}
 .btn {
     display: inline-block;
     background: var(--light-color);
@@ -536,6 +545,12 @@ button {
   margin-bottom: 16px;
   width: 100%;
 } */
+.display-1 {
+    font-size: 6rem;
+    font-weight: 300;
+    line-height: 1.2;
+    color: var(--danger-color);
+}
 .message__sent {
     margin-bottom: 16px;
     width: 60%;
@@ -586,6 +601,7 @@ button {
     border: 3px solid var(--primary-color);
     border-radius: 30px;
 }
+
 /* Mobile Styles */
 @media (max-width: 700px) {
     .container {
@@ -607,6 +623,7 @@ button {
 
     .lead {
         font-size: 1rem;
+        font-weight: 300;
     }
 
     /* Navbar */
@@ -644,32 +661,5 @@ button {
     .profile img {
         width: 200px;
         margin: auto;
-    }
-
-    .profile-grid {
-        grid-template-areas:
-            "top"
-            "about"
-            "exp"
-            "edu"
-            "github";
-    }
-
-    .profile-about .skills {
-        flex-direction: column;
-    }
-
-    .dash-buttons a {
-        display: block;
-        width: 100%;
-        margin-bottom: 0.2rem;
-    }
-
-    .post {
-        grid-template-columns: 1fr;
-    }
-    .post a,
-    .post button {
-        padding: 0.3rem 0.4rem;
     }
 }
