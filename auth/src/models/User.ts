@@ -20,6 +20,29 @@ const UserSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    profileSettings: {
+        language: {
+            type: String,
+            default: "english"
+        },
+        socials: {
+            youtube: {
+                type: String
+            },
+            twitter: {
+                type: String
+            },
+            facebook: {
+                type: String
+            },
+            linkedin: {
+                type: String
+            },
+            instagram: {
+                type: String
+            }
+        }
     }
 });
 UserSchema.pre("save", async function(next) {

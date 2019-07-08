@@ -13,6 +13,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import Navbar from "./components/layout/Navbar";
 import Alert from "./components/layout/Alert";
 import Landing from "./components/layout/Landing";
+import ProfileSettings from "./components/layout/ProfileSettings";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/routing/PrivateRoute";
@@ -21,7 +22,7 @@ import { loadUser } from "./actions/auth";
 
 const App = () => {
     useEffect(() => {
-        //@ts-ignore
+        // @ts-ignore
         store.dispatch(loadUser());
     }, []);
     return (
@@ -35,6 +36,7 @@ const App = () => {
                         <Route exact path="/register" component={Register} />
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                        <PrivateRoute exact path="/profile/settings" component={ProfileSettings} />
                         <Route component={Page404} />
                     </Switch>
                 </Fragment>
