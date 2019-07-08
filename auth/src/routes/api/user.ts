@@ -62,5 +62,7 @@ router.post(
         }
     }
 );
-
+router.get("/", (req, res) => {
+    res.send("/api/users");
+});
 export default router;

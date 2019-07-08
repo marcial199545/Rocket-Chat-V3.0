@@ -12,7 +12,7 @@ const connectDB: any = async () => {
             config.get("mongoURI"),
             dbConfig
         );
-        console.log(`DB auth is connected 🐲 `);
+        console.log(`DB notifications is connected 🌀 `);
     } catch (error) {
         console.error(error.message);
         //NOTE exit process if something is wrong
