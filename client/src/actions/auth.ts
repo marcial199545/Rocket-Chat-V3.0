@@ -70,7 +70,6 @@ export const logout = () => async (dispatch: any) => {
 export const loadUser = () => async (dispatch: any) => {
     try {
         const res = await axios.get("/api/auth");
-        console.log("TCL: loadUser -> res", res.data);
         dispatch({
             type: USER_LOADED,
             payload: res.data

@@ -6,7 +6,8 @@ import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT,
-    REMOVE_USER
+    REMOVE_USER,
+    UPDATE_PROFILE
 } from "../actions/types";
 const initialState: any = {
     isAuthenticated: false,
@@ -29,6 +30,7 @@ export default function(state = initialState, action: any) {
                 isAuthenticated: true,
                 loading: false
             };
+        case UPDATE_PROFILE:
         case USER_LOADED:
             return {
                 ...state,

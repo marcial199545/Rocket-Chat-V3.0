@@ -4,7 +4,7 @@ import gravatar from "gravatar";
 import jwt from "jsonwebtoken";
 import User from "../../models/User";
 import config from "config";
-// const config = require("config");
+import auth from "../../middleware/auth";
 
 const router = Router();
 
@@ -62,7 +62,11 @@ router.post(
         }
     }
 );
-router.get("/", (req, res) => {
-    res.send("/api/users");
+
+router.put("/profile/update", auth, async (req: any, res: any) => {
+    console.log("TCL: req.body", req.body);
+    let user = await User.findByIdAndUpdate(req.user.id, { profileSettings: req.body }, { new: true });
+    res.send(user);
 });
+
 export default router;

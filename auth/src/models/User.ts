@@ -28,19 +28,25 @@ const UserSchema = new Schema({
         },
         socials: {
             youtube: {
-                type: String
+                type: String,
+                default: "youtube"
             },
             twitter: {
-                type: String
+                type: String,
+                default: "twitter"
             },
             facebook: {
-                type: String
+                type: String,
+                default: "facebook",
+                trim: true
             },
             linkedin: {
-                type: String
+                type: String,
+                default: "linkedin"
             },
             instagram: {
-                type: String
+                type: String,
+                default: "instagram"
             }
         }
     }
