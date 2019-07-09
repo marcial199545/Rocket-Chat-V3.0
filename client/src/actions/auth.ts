@@ -20,7 +20,7 @@ export const registerUser = ({ name, email, password }: { name: string; email: s
     };
     const body = { name, email, password };
     try {
-        await axios.post("/api/users", body, config);
+        const res = await axios.post("/api/users", body, config);
         dispatch({
             type: REGISTER_SUCCESS
         });
@@ -31,7 +31,7 @@ export const registerUser = ({ name, email, password }: { name: string; email: s
             errors.forEach((error: any) => dispatch(setAlert(error.msg, "danger")));
         }
         dispatch({ type: REGISTER_FAIL });
-        dispatch(loadUser());
+        // dispatch(logout());
     }
 };
 // NOTE Login User
@@ -52,7 +52,7 @@ export const login = (email: string, password: string) => async (dispatch: any) 
             errors.forEach((error: any) => dispatch(setAlert(error.msg, "danger")));
         }
         dispatch({ type: LOGIN_FAIL });
-        dispatch(loadUser());
+        // dispatch(logout());
     }
 };
 // NOTE Logout User

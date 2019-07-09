@@ -54,7 +54,7 @@ router.post(
                     throw err;
                 }
                 res.cookie("token", token, { httpOnly: true });
-                res.send("cookie sent");
+                res.send(payload);
             });
         } catch (error) {
             console.error(error.message);
