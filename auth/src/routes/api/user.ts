@@ -64,7 +64,6 @@ router.post(
 );
 
 router.put("/profile/update", auth, async (req: any, res: any) => {
-    console.log("TCL: req.body", req.body);
     let user = await User.findByIdAndUpdate(req.user.id, { profileSettings: req.body }, { new: true });
     res.send(user);
 });

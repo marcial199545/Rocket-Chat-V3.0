@@ -64,7 +64,6 @@ router.post(
 router.get("/", auth, async (req: any, res: any) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
-        console.log("TCL: user", user);
         res.json(user);
     } catch (error) {
         console.error(error.message);
