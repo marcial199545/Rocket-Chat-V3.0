@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import User from "../../models/User";
 import config from "config";
 import auth from "../../middleware/auth";
-
+import uuid from "uuid";
 const router = Router();
 
 // @route   POST api/users
@@ -62,10 +62,47 @@ router.post(
         }
     }
 );
-
+// @route   PUT /api/users/profile/update
+// @desc    update the profile settings of a user
+// @access  Private
 router.put("/profile/update", auth, async (req: any, res: any) => {
     let user = await User.findByIdAndUpdate(req.user.id, { profileSettings: req.body }, { new: true });
     res.send(user);
 });
+// @route   get /api/users/me
+// @desc    get current User
+// @access  Private
+router.get("/me", auth, async (req: any, res: any) => {
+    let user = await User.findById(req.user.id, { name: 1, email: 1, avatar: 1, _id: 1 });
+    res.send(user);
+});
 
+// @route   POST /api/users/contact
+// @desc    check if the email exist
+// @access  Private
+router.post(
+    "/contact",
+    [auth, check("email", "Please add an email in the correct format").isEmail()],
+    async (req: any, res: Response) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+            const email = req.body.email;
+            let contact: any = await User.findOne({ email }, { name: 1, email: 1, avatar: 1, _id: 1 });
+            if (!contact) {
+                return res.status(400).json({ errors: [{ msg: "Contact do not exist" }] });
+            }
+            const response = {
+                contact,
+                userId: req.user.id
+            };
+            res.send(response);
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).send("Server error");
+        }
+    }
+);
 export default router;

@@ -20,7 +20,9 @@ export const registerUser = ({ name, email, password }: { name: string; email: s
     };
     const body = { name, email, password };
     try {
-        await axios.post("/api/users", body, config);
+        let res = await axios.post("/api/users", body, config);
+        // TODO add the request to add the same user in the notification service, the response from the las request contains the same Object id
+        await axios.post("/api/notifications", res.data, config);
         dispatch({
             type: REGISTER_SUCCESS
         });
@@ -58,8 +60,7 @@ export const login = (email: string, password: string) => async (dispatch: any) 
 // NOTE Logout User
 export const logout = () => async (dispatch: any) => {
     try {
-        const res = await axios.delete("/api/auth");
-        console.log("TCL: logout -> res", res);
+        await axios.delete("/api/auth");
         dispatch({ type: CLEAR_PROFILE });
         dispatch({ type: LOGOUT });
     } catch (error) {

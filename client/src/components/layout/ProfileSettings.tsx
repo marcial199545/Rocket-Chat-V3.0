@@ -31,13 +31,13 @@ const ProfileSettings = ({
             youtube: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.youtube,
             instagram: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.instagram
         });
+        // eslint-disable-next-line
     }, [loading]);
     const [displaySocialInputs, toogleSocialInputs] = useState(false);
     const onChange = (e: ChangeEvent<any>) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("submitted");
         updateProfileSettings(formData);
     };
     return loading ? (

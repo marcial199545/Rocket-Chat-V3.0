@@ -15,6 +15,7 @@ const Login = ({ login, isAuthenticated }: { login: any; isAuthenticated: boolea
     const onSubmit = async (e: any) => {
         e.preventDefault();
         login(email, password);
+        setFormData({ email: "", password: "" });
     };
     if (isAuthenticated) {
         return <Redirect to="/dashboard" />;

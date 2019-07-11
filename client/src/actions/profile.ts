@@ -2,6 +2,7 @@ import axios from "axios";
 import { setAlert } from "./alert";
 import { PROFILE_ERROR, UPDATE_PROFILE } from "./types";
 
+//NOTE Update Profile Settings
 export const updateProfileSettings = (formData: any) => async (dispatch: any) => {
     const profileSettings = {
         language: formData.language ? formData.language : "",

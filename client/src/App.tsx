@@ -14,6 +14,7 @@ import Navbar from "./components/layout/Navbar";
 import Alert from "./components/layout/Alert";
 import Landing from "./components/layout/Landing";
 import ProfileSettings from "./components/layout/ProfileSettings";
+import AddContactForm from "./components/users/AddContactForm";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import PrivateRoute from "./components/routing/PrivateRoute";
@@ -37,6 +38,7 @@ const App = () => {
                         <Route exact path="/login" component={Login} />
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
                         <PrivateRoute exact path="/profile/settings" component={ProfileSettings} />
+                        <PrivateRoute exact path="/contact/add" component={AddContactForm} />
                         <Route component={Page404} />
                     </Switch>
                 </Fragment>

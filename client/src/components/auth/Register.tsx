@@ -31,6 +31,7 @@ const Register = ({
             console.log(`success`);
             registerUser({ name, email, password });
         }
+        setFormData({ email: "", password: "", name: "", password2: "" });
     };
     if (isAuthenticated) {
         return <Redirect to="/dashboard" />;

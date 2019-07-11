@@ -7,6 +7,9 @@ const ContactSchema = new Schema(
             },
             email: {
                 type: String
+            },
+            avatar: {
+                type: String
             }
         },
         status: {

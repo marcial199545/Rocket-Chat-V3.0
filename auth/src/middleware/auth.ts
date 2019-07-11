@@ -3,7 +3,6 @@ import config from "config";
 
 export default function(req: any, res: any, next: any) {
     const token = req.cookies.token;
-    console.log("TCL: token", token);
     if (!token) {
         return res.status(401).json({ msg: "No token, authorization denied" });
     }
