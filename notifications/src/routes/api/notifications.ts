@@ -71,4 +71,50 @@ router.post("/me/contacts", async (req: any, res) => {
     let contactsNotificationUser: any = await UserNotification.findById(userID, { contacts: 1, _id: 0 });
     res.send(contactsNotificationUser);
 });
+
+// @route   POST api/notifications/handle/contact/request
+// @desc    handle the contact request
+// @access  Private
+router.post("/handle/contact/request", async (req: any, res) => {
+    const { desicion, contactInfo, currentUserInfo } = req.body;
+    // NOTE Current user contacts
+    let currentUserContacts: any = await UserNotification.findById(currentUserInfo._id, { contacts: 1 });
+
+    // NOTE User being requested contacts
+    let contactUserRequested: any = await UserNotification.findById(contactInfo.contact._id, { contacts: 1 });
+
+    if (desicion === "rejected") {
+        let contactToReject = currentUserContacts.contacts.find((contact: any) => {
+            return contact.contactProfile.email === contactInfo.contact.email;
+        });
+        contactToReject.status = "rejected";
+        currentUserContacts.contacts = currentUserContacts.contacts.filter((contact: any) => {
+            return contact.status !== "rejected";
+        });
+        await currentUserContacts.save();
+
+        let currentUserToReject = contactUserRequested.contacts.find((contact: any) => {
+            return contact.contactProfile.email === currentUserInfo.email;
+        });
+        currentUserToReject.status = "rejected";
+        contactUserRequested.contacts = contactUserRequested.contacts.filter((contact: any) => {
+            return contact.status !== "rejected";
+        });
+        await contactUserRequested.save();
+        res.send("rejected");
+    } else if (desicion === "accepted") {
+        let contactToAccept = currentUserContacts.contacts.find((contact: any) => {
+            return contact.contactProfile.email === contactInfo.contact.email;
+        });
+        contactToAccept.status = "friend";
+        await currentUserContacts.save();
+
+        let currentUserToAccept = contactUserRequested.contacts.find((contact: any) => {
+            return contact.contactProfile.email === currentUserInfo.email;
+        });
+        currentUserToAccept.status = "friend";
+        await contactUserRequested.save();
+        res.send("accepted");
+    }
+});
 export default router;

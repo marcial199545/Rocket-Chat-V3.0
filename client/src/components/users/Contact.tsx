@@ -5,7 +5,7 @@ const Contact = ({ auth: { user } }: { auth: any }) => {
     return (
         <div className="user user__contact">
             <p>
-                <img className="user__avatar" src={user && user.avatar} alt="" /> <span> {user && user.name}</span>
+                <img className="contact__avatar" src={user && user.avatar} alt="" /> <span> {user && user.name}</span>
             </p>
         </div>
     );

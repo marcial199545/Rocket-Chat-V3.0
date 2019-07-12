@@ -1,17 +1,15 @@
 import React, { Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-
 import { Link } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 const User = ({ user, contacts }: { user: any; contacts: any }) => {
-    if (user === null) {
+    if (user === null || contacts === null) {
         return <Spinner />;
     }
     const friendRequests = contacts.filter((contact: any) => {
         return contact.status === "requested";
     });
-    console.log("TCL: User -> friendRequests", friendRequests);
     const { instagram, twitter, facebook, youtube, linkedin } = user.profileSettings.socials;
     const instagramLink = `https://www.instagram.com/${instagram}`;
     const twitterLink = `https://www.twitter.com/${twitter}`;
@@ -22,9 +20,9 @@ const User = ({ user, contacts }: { user: any; contacts: any }) => {
         <Fragment>
             {
                 <span className="social-input hide-sm">
-                    <a target="_blank" rel="noopener noreferrer" href={twitterLink}>
+                    <Link to={"/friendRequests"}>
                         <i className="fas fa-address-card fa-2x" /> {friendRequests.length}
-                    </a>
+                    </Link>
                 </span>
             }
             {twitter && (
@@ -82,7 +80,7 @@ User.propTypes = {
 };
 const mapStateToProps = (state: any) => ({
     user: state.auth.user,
-    contacts: state.contacts
+    contacts: state.contacts.contacts
 });
 
 export default connect(mapStateToProps)(User);

@@ -1,4 +1,4 @@
-import React, { useState, Fragment, ChangeEvent, FormEvent } from "react";
+import React, { useState, Fragment, ChangeEvent } from "react";
 
 const ChatForm = () => {
     const [formData, setFormData] = useState({
@@ -7,16 +7,20 @@ const ChatForm = () => {
     const { message } = formData;
     const onChange = (e: ChangeEvent<HTMLInputElement>) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: any) => {
         e.preventDefault();
-        console.log("send Message");
+        let message = e.target.elements.message.value;
+        if (message.trim() !== "") {
+            console.log("send Message", message);
+        }
+        setFormData({ message: "" });
     };
     return (
         <Fragment>
-            <form onSubmit={e => onSubmit(e)}>
+            <form id="message__form" onSubmit={e => onSubmit(e)}>
                 <input value={message} onChange={e => onChange(e)} type="text" placeholder="Message" name="message" />
-                <button type="submit" className="btn btn-primary">
-                    Send
+                <button type="submit">
+                    <i className="fas fa-arrow-circle-right" />
                 </button>
             </form>
         </Fragment>
