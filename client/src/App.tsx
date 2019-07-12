@@ -25,7 +25,7 @@ const App = () => {
     useEffect(() => {
         // @ts-ignore
         store.dispatch(loadUser());
-    }, []);
+    });
     return (
         <Provider store={store}>
             <Router>

@@ -70,6 +70,19 @@ router.get("/", auth, async (req: any, res: any) => {
         res.status(500).send("Server error");
     }
 });
+
+// @route   GET api/auth/me/id
+// @desc    get the userId of the authenticated user
+// @access  Private
+router.get("/me/id", auth, async (req: any, res: any) => {
+    try {
+        const userID = await User.findById(req.user.id, { _id: 1 });
+        res.json(userID);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+});
 // @route   DELETE api/auth
 // @desc    remove token
 // @access  Public

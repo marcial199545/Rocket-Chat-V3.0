@@ -9,6 +9,7 @@ import {
     CLEAR_PROFILE,
     LOGOUT
 } from "./types";
+import { clearContacts } from "./contacts";
 import { setAlert } from "./alert";
 
 // NOTE Register User
@@ -63,6 +64,7 @@ export const logout = () => async (dispatch: any) => {
         await axios.delete("/api/auth");
         dispatch({ type: CLEAR_PROFILE });
         dispatch({ type: LOGOUT });
+        dispatch(clearContacts());
     } catch (error) {
         console.log(error);
     }

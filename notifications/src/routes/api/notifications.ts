@@ -62,4 +62,13 @@ router.post("/add/contact/request", async (req: any, res) => {
     await notificationUser.save();
     res.send("add contact request");
 });
+
+// @route   POST api/notifications/me/contacts
+// @desc    get all the contacts of an user
+// @access  Private
+router.post("/me/contacts", async (req: any, res) => {
+    let { _id: userID } = req.body;
+    let contactsNotificationUser: any = await UserNotification.findById(userID, { contacts: 1, _id: 0 });
+    res.send(contactsNotificationUser);
+});
 export default router;

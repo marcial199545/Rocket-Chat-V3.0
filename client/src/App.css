@@ -608,6 +608,16 @@ button {
     padding-top: 10px;
     padding-left: 10px;
 }
+.contact {
+    background-color: var(--dark-color);
+    color: var(--light-color);
+    border-radius: 10px;
+    display: block;
+    padding: 8px;
+}
+.contact__button {
+    width: 100%;
+}
 .user__contact {
     width: 95%;
     margin: 10px auto;
