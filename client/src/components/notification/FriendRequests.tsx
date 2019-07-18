@@ -41,20 +41,17 @@ const FriendRequests = ({
     };
     return (
         <Fragment>
-            {friendRequest.length === 0 ? (
-                <div className="jumbotron jumbotron-fluid m-3">
-                    <h1 className="display-1">
-                        No friend request <i className="fas fa-frown" />
-                    </h1>
-                    <p className="lead">Sorry but you dont have any friend request</p>
-                    <span>
-                        <Link to="/dashboard">Go Home</Link>
-                    </span>
-                </div>
-            ) : (
-                friendRequest.map((contact: any) => {
-                    return (
-                        <div className="container container__friendRequest">
+            <div className="container container__friendRequest">
+                {friendRequest.length === 0 ? (
+                    <Fragment>
+                        <h1 className="display-1">
+                            No friend request <i className="fas fa-poop" />
+                        </h1>
+                        <p className="lead">Sorry but you do not have any friend request</p>
+                    </Fragment>
+                ) : (
+                    friendRequest.map((contact: any) => {
+                        return (
                             <Fragment key={uuid.v4()}>
                                 <div className="contact user__contact__friend user__contact__friend__request">
                                     <div>
@@ -80,11 +77,11 @@ const FriendRequests = ({
                                     </div>
                                 </div>
                             </Fragment>
-                            <Link to="/dashboard">Go Home</Link>
-                        </div>
-                    );
-                })
-            )}
+                        );
+                    })
+                )}
+                <Link to="/dashboard">Go Home</Link>
+            </div>
         </Fragment>
     );
 };

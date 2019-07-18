@@ -10,6 +10,9 @@ const ContactSchema = new Schema(
             },
             avatar: {
                 type: String
+            },
+            roomId: {
+                type: String
             }
         },
         status: {

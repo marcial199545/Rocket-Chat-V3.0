@@ -1,5 +1,7 @@
 import React, { useState, Fragment, ChangeEvent } from "react";
-
+import io from "socket.io-client";
+// eslint-disable-next-line
+export const socket = io("localhost:5001");
 const ChatForm = () => {
     const [formData, setFormData] = useState({
         message: ""

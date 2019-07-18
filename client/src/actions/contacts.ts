@@ -75,5 +75,9 @@ export const handleFriendRequest = (desicion: string, email: string) => async (d
             : dispatch(setAlert("contact rejected", "danger"));
     } catch (error) {
         console.log(error);
+        const errors = error.response.data.errors ? error.response.data.errors : undefined;
+        if (errors) {
+            errors.forEach((error: any) => dispatch(setAlert(error.msg, "danger")));
+        }
     }
 };

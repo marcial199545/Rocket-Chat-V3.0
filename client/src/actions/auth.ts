@@ -7,7 +7,8 @@ import {
     LOGIN_FAIL,
     LOGIN_SUCCESS,
     CLEAR_PROFILE,
-    LOGOUT
+    LOGOUT,
+    CLEAR_MESSAGES
 } from "./types";
 import { clearContacts } from "./contacts";
 import { setAlert } from "./alert";
@@ -27,6 +28,7 @@ export const registerUser = ({ name, email, password }: { name: string; email: s
         dispatch({
             type: REGISTER_SUCCESS
         });
+
         dispatch(loadUser());
     } catch (error) {
         const errors = error.response.data.errors;
@@ -65,6 +67,9 @@ export const logout = () => async (dispatch: any) => {
         dispatch({ type: CLEAR_PROFILE });
         dispatch({ type: LOGOUT });
         dispatch(clearContacts());
+        dispatch({
+            type: CLEAR_MESSAGES
+        });
     } catch (error) {
         console.log(error);
     }

@@ -1,13 +1,19 @@
 import { Schema } from "mongoose";
-import MessageSchema from "./MessageSchema";
+import ParticipantSchema from "./ParticipantSchema";
 const ConversationSchema = new Schema(
     {
-        participants: [Schema.Types.ObjectId],
+        participants: [ParticipantSchema],
         roomId: {
             type: String,
             required: true
+        },
+        flag: {
+            type: String,
+            default: "private"
         }
     },
-    { _id: false }
+    {
+        _id: false
+    }
 );
 export default ConversationSchema;

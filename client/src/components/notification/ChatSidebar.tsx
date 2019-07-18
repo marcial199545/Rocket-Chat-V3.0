@@ -1,11 +1,29 @@
 import React, { useEffect, Fragment } from "react";
-import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import { loadMessages } from "../../actions/messages";
+import { joinRoom, leaveRoom } from "../../actions/sockets";
+import { Link } from "react-router-dom";
 import { loadContacts } from "../../actions/contacts";
 import PropTypes from "prop-types";
 import uuid from "uuid";
+import { socket } from "./ChatForm";
 import Spinner from "../layout/Spinner";
-const ChatSidebar = ({ loadContacts, contacts }: { loadContacts: any; contacts: any }) => {
+
+const ChatSidebar = ({
+    loadContacts,
+    loadMessages,
+    joinRoom,
+    leaveRoom,
+    currentRoom,
+    contacts
+}: {
+    loadContacts: any;
+    loadMessages: any;
+    joinRoom: any;
+    leaveRoom: any;
+    currentRoom: any;
+    contacts: any;
+}) => {
     useEffect(() => {
         loadContacts();
         // eslint-disable-next-line
@@ -13,10 +31,19 @@ const ChatSidebar = ({ loadContacts, contacts }: { loadContacts: any; contacts: 
     if (contacts === null) {
         return <Spinner />;
     }
+    const handleClick = (e: any, contact: any) => {
+        e.preventDefault();
+        loadMessages(contact);
+        if (currentRoom === null) {
+            joinRoom(socket, contact.roomId);
+        } else {
+            leaveRoom(socket, currentRoom);
+            joinRoom(socket, contact.roomId);
+        }
+    };
     let friendsContacts = contacts.filter((contact: any) => {
         return contact.status === "friend";
     });
-    console.log("TCL: ChatSidebar -> friendsContacts", friendsContacts);
     return (
         <div className="chat__sidebar">
             <div id="add-contact-container">
@@ -31,7 +58,12 @@ const ChatSidebar = ({ loadContacts, contacts }: { loadContacts: any; contacts: 
                                 <span> {contact.contactProfile.name}</span>
                             </div>
                             <div>
-                                <button className="btn btn-light contact__button">send message</button>
+                                <button
+                                    onClick={e => handleClick(e, contact.contactProfile)}
+                                    className="btn btn-light contact__button"
+                                >
+                                    send message
+                                </button>
                             </div>
                         </div>
                     </Fragment>
@@ -42,14 +74,18 @@ const ChatSidebar = ({ loadContacts, contacts }: { loadContacts: any; contacts: 
 };
 ChatSidebar.propTypes = {
     loadContacts: PropTypes.func,
+    loadMessages: PropTypes.func,
+    joinRoom: PropTypes.func,
+    leaveRoom: PropTypes.func,
     contacts: PropTypes.array
 };
 
 const mapStateToProps = (state: any) => ({
-    contacts: state.contacts.contacts
+    contacts: state.contacts.contacts,
+    currentRoom: state.sockets.currentRoom
 });
 
 export default connect(
     mapStateToProps,
-    { loadContacts }
+    { loadContacts, loadMessages, joinRoom, leaveRoom }
 )(ChatSidebar);

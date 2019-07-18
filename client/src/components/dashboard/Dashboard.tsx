@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Spinner from "../layout/Spinner";
 import User from "../users/User";
 import Chat from "../notification/Chat";
+
 const Dashboard = ({ loading }: { loading: boolean }) => {
     return loading ? (
         <Spinner />

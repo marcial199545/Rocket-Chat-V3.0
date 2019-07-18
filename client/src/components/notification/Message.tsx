@@ -1,5 +1,4 @@
 import React from "react";
-
 const Message = (props: any) => {
     return (
         <div className={props.sent ? "message__sent" : "message__received"}>

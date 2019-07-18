@@ -4,8 +4,7 @@ import ConversationSchema from "./Schemas/ConversationSchema";
 import MessageSchema from "./Schemas/MessageSchema";
 const UserNotificationSchema = new Schema({
     contacts: [ContactSchema],
-    conversations: [ConversationSchema],
-    messages: [MessageSchema]
+    conversations: [ConversationSchema]
 });
 const UserNotification = model("user", UserNotificationSchema);
 export default UserNotification;

@@ -65,9 +65,10 @@ const User = ({ user, contacts }: { user: any; contacts: any }) => {
     return (
         <div className="user">
             <div>
-                <p className="lead">
-                    <img className="user__avatar" src={user && user.avatar} alt="" /> <span> {user && user.name}</span>
-                </p>
+                <img className="user__avatar" src={user && user.avatar} alt="" />{" "}
+                <span>
+                    <h1>{user && user.name}</h1>
+                </span>
                 <Link to="/profile/settings">Change Profile Settings</Link>
             </div>
             {socials}

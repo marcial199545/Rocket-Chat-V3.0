@@ -169,7 +169,8 @@ img {
     padding: 0.1rem;
     text-align: center;
     margin: 0.3rem;
-    background: var(--light-color);
+    border-radius: 60px;
+    background: #2b292945;
     color: #333;
 }
 
@@ -545,7 +546,7 @@ button {
 }
 .chat__messages {
     flex-grow: 1;
-    padding: 24px 24px 0;
+    padding: 4px 14px 0;
     overflow-y: scroll;
 }
 .compose form {
@@ -577,11 +578,35 @@ button {
     background-color: #ffffff00;
     color: var(--dark-color);
 }
-.display-1 {
-    font-size: 6rem;
+.display {
+    font-size: 3rem;
     font-weight: 300;
     line-height: 1.2;
+}
+.display-danger {
     color: var(--danger-color);
+}
+.display-warning {
+    color: var(--warning-color);
+}
+.display-info {
+    color: gray;
+}
+.user-badge {
+    display: flex;
+    justify-content: flex-start;
+    background-color: var(--dark-color);
+    padding: 5px 0;
+    border-radius: 0 0 10px 10px;
+}
+.user-badge img {
+    width: 53px;
+    border-radius: 20px;
+    margin-left: 30px;
+}
+.user-badge h1 {
+    color: var(--light-color);
+    margin-left: 30px;
 }
 .message__sent {
     margin-bottom: 16px;
