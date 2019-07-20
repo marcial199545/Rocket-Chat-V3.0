@@ -3,8 +3,12 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../actions/auth";
+import { socket } from "../notification/ChatForm";
 
 const Navbar = ({ isAuthenticated, loading, logout }: { isAuthenticated: any; loading: any; logout: any }) => {
+    const handleLogout = (socket: any) => {
+        logout(socket);
+    };
     const authLinks = (
         <ul>
             <li>
@@ -13,7 +17,12 @@ const Navbar = ({ isAuthenticated, loading, logout }: { isAuthenticated: any; lo
                 </Link>
             </li>
             <li>
-                <a onClick={logout} href="#!">
+                <a
+                    onClick={() => {
+                        handleLogout(socket);
+                    }}
+                    href="#!"
+                >
                     <i className="fas fa-sign-out-alt" /> <span className="hide-sm">Logout</span>
                 </a>
             </li>

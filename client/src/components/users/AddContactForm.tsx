@@ -4,13 +4,14 @@ import { Link } from "react-router-dom";
 import Spinner from "../layout/Spinner";
 import PropTypes from "prop-types";
 import { addContact } from "../../actions/contacts";
+import { socket } from "../notification/ChatForm";
 const AddContactForm = ({ loading, user, addContact }: { loading: any; user: any; addContact: any }) => {
     const [formData, setFormData] = useState({
         email: ""
     });
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        addContact(email);
+        addContact(socket, email);
         setFormData({ email: "" });
     };
     const onChange = (e: ChangeEvent<HTMLInputElement>) =>

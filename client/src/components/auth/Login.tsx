@@ -1,6 +1,7 @@
 import React, { Fragment, useState } from "react";
 // eslint-disable-next-line
 import { Link, Redirect } from "react-router-dom";
+import { socket } from "../notification/ChatForm";
 import { login } from "../../actions/auth";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -12,9 +13,9 @@ const Login = ({ login, isAuthenticated }: { login: any; isAuthenticated: boolea
     });
     const { email, password } = formData;
     const onChange = (e: any) => setFormData({ ...formData, [e.target.name]: e.target.value });
-    const onSubmit = async (e: any) => {
+    const onSubmit = async (e: any, socket: any) => {
         e.preventDefault();
-        login(email, password);
+        login(email, password, socket);
         setFormData({ email: "", password: "" });
     };
     if (isAuthenticated) {
@@ -27,7 +28,7 @@ const Login = ({ login, isAuthenticated }: { login: any; isAuthenticated: boolea
                 <p className="lead">
                     <i className="fas fa-user" /> Sign Into Your Account
                 </p>
-                <form className="form" onSubmit={e => onSubmit(e)}>
+                <form className="form" onSubmit={e => onSubmit(e, socket)}>
                     <div className="form-group">
                         <input
                             value={email}

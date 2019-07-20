@@ -15,7 +15,9 @@ const ChatSidebar = ({
     joinRoom,
     leaveRoom,
     currentRoom,
-    contacts
+    contacts,
+    showingGroups,
+    dispatch
 }: {
     loadContacts: any;
     loadMessages: any;
@@ -23,31 +25,94 @@ const ChatSidebar = ({
     leaveRoom: any;
     currentRoom: any;
     contacts: any;
+    showingGroups: any;
+    dispatch?: any;
 }) => {
     useEffect(() => {
         loadContacts();
         // eslint-disable-next-line
     }, []);
+
     if (contacts === null) {
         return <Spinner />;
     }
+
     const handleClick = (e: any, contact: any) => {
         e.preventDefault();
         loadMessages(contact);
+        if (currentRoom === contact.roomId) {
+            return;
+        }
         if (currentRoom === null) {
             joinRoom(socket, contact.roomId);
-        } else {
+        } else if (currentRoom !== null) {
             leaveRoom(socket, currentRoom);
             joinRoom(socket, contact.roomId);
         }
     };
+    const handleClickGroup = (e: any) => {
+        e.preventDefault();
+        if (!showingGroups) {
+            loadContacts(true);
+        } else if (showingGroups) {
+            loadContacts();
+        }
+    };
+    if (contacts.length === 0 && showingGroups) {
+        return (
+            <div className="chat__sidebar">
+                <div id="add-contact-container">
+                    <Link to="/contact/add">Add Contact</Link>
+                    <button
+                        id="groupButton"
+                        onClick={e => {
+                            handleClickGroup(e);
+                        }}
+                    >
+                        {showingGroups ? <i className="fas fa-user-friends" /> : <i className="fas fa-users" />}
+                    </button>
+                </div>
+                <div className="display display-info">
+                    No Groups <i className="fas fa-poop" />{" "}
+                </div>
+            </div>
+        );
+    }
     let friendsContacts = contacts.filter((contact: any) => {
         return contact.status === "friend";
     });
+    if (friendsContacts.length === 0) {
+        return (
+            <div className="chat__sidebar">
+                <div id="add-contact-container">
+                    <Link to="/contact/add">Add Contact</Link>
+                    <button
+                        id="groupButton"
+                        onClick={e => {
+                            handleClickGroup(e);
+                        }}
+                    >
+                        {showingGroups ? <i className="fas fa-user-friends" /> : <i className="fas fa-users" />}
+                    </button>
+                </div>
+                <div className="display display-info">
+                    No Friends <i className="fas fa-poop" />
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="chat__sidebar">
             <div id="add-contact-container">
                 <Link to="/contact/add">Add Contact</Link>
+                <button
+                    id="groupButton"
+                    onClick={e => {
+                        handleClickGroup(e);
+                    }}
+                >
+                    {showingGroups ? <i className="fas fa-user-friends" /> : <i className="fas fa-users" />}
+                </button>
             </div>
             {friendsContacts.map((contact: any) => {
                 return (
@@ -82,6 +147,7 @@ ChatSidebar.propTypes = {
 
 const mapStateToProps = (state: any) => ({
     contacts: state.contacts.contacts,
+    showingGroups: state.contacts.showingGroups,
     currentRoom: state.sockets.currentRoom
 });
 

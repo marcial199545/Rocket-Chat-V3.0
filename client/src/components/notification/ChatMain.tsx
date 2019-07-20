@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ChatForm from "./ChatForm";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import UserBadge from "../users/UserBadge";
 import Message from "./Message";
+import { autoScroll } from "../../helpers";
+
 const ChatMain = ({
     messages,
     participants,
@@ -15,7 +17,9 @@ const ChatMain = ({
     roomId?: string;
     loading?: boolean;
 }) => {
-    // console.log(messages);
+    useEffect(() => {
+        autoScroll();
+    }, []);
     if (messages === null || loading === true) {
         return (
             <div className="chat__main">
@@ -31,7 +35,7 @@ const ChatMain = ({
         );
     } else if (messages !== null && messages.length === 0) {
         const contact = participants[1];
-        // console.log("TCL: contact", contact);
+        console.log("TCL: contact", contact);
         return (
             <div className="chat__main">
                 <UserBadge userName={contact.name} gravatar={contact.avatar} />
@@ -46,10 +50,22 @@ const ChatMain = ({
             </div>
         );
     }
+    const contact = participants[1];
     return (
         <div className="chat__main">
+            <UserBadge userName={contact.name} gravatar={contact.avatar} />
             <div className="chat__messages">
-                <Message sent={true} />
+                {messages.map((message: any) => {
+                    return (
+                        <Message
+                            key={message._id}
+                            sent={message.sent}
+                            sender={message.sender}
+                            date={message.date}
+                            msg={message.msg}
+                        />
+                    );
+                })}
             </div>
             <div className="compose">
                 <ChatForm />

@@ -1,9 +1,9 @@
-import { CONTACTS_LOADED, CLEAR_CONTACTS } from "./types";
+import { CONTACTS_LOADED, CLEAR_CONTACTS, GROUPS_LOADED, EMPTY_GROUPS } from "./types";
 import { setAlert } from "./alert";
 import axios from "axios";
 
 //NOTE add a contact
-export const addContact = (email: string) => async (dispatch: any) => {
+export const addContact = (socket: any, email: string) => async (dispatch: any) => {
     try {
         //NOTE get contactInfo
         let contactInfo: any = await axios.post("/api/users/contact", { email });
@@ -35,19 +35,41 @@ export const clearContacts = () => (dispatch: any) => {
 };
 
 // NOTE load contacts
-export const loadContacts = () => async (dispatch: any) => {
+export const loadContacts = (group?: boolean) => async (dispatch: any) => {
     try {
         const config: any = {
             "Content-Type": "application/json"
         };
         let userID = await axios.get("/api/auth/me/id");
-        let userContacts = await axios.post("api/notifications/me/contacts", userID.data, config);
-        userContacts.data.contacts.filter((contact: any) => {
+        let userConversations: any = await axios.post("api/notifications/me/contacts", userID.data, config);
+        if (group) {
+            let groupConversations = userConversations.data.conversations.filter((conversation: any) => {
+                return conversation.flag !== "private";
+            });
+            if (groupConversations.contacts === undefined) {
+                dispatch(clearContacts());
+                dispatch({
+                    type: EMPTY_GROUPS
+                });
+                return;
+            }
+            let contacts = groupConversations.contacts.filter((contact: any) => {
+                return contact.status !== "rejected";
+            });
+            dispatch(clearContacts());
+            dispatch({
+                type: GROUPS_LOADED,
+                payload: contacts
+            });
+            return;
+        }
+        let contacts = userConversations.data.contacts.filter((contact: any) => {
             return contact.status !== "rejected";
         });
+        dispatch(clearContacts());
         dispatch({
             type: CONTACTS_LOADED,
-            payload: userContacts.data.contacts
+            payload: contacts
         });
     } catch (error) {
         console.log(error);

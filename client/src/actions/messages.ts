@@ -1,7 +1,7 @@
 import { MESSAGES_LOADED, CLEAR_MESSAGES } from "./types";
 import { setAlert } from "./alert";
 import axios from "axios";
-
+import { autoScroll } from "../helpers";
 export const loadMessages = (contact: any) => async (dispatch: any) => {
     try {
         let currentUserInfo: any = await axios.get("/api/users/me");
@@ -25,6 +25,10 @@ export const loadMessages = (contact: any) => async (dispatch: any) => {
             type: MESSAGES_LOADED,
             payload
         });
+
+        setTimeout(() => {
+            autoScroll();
+        }, 200);
     } catch (error) {
         console.log(error);
         const errors = error.response.data.errors ? error.response.data.errors : undefined;

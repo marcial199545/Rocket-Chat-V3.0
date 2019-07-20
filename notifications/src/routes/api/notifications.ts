@@ -72,7 +72,7 @@ router.post("/add/contact/request", async (req: any, res) => {
 // @access  Private
 router.post("/me/contacts", async (req: any, res) => {
     let { _id: userID } = req.body;
-    let contactsNotificationUser: any = await UserNotification.findById(userID, { contacts: 1, _id: 0 });
+    let contactsNotificationUser: any = await UserNotification.findById(userID, { _id: 0 });
     res.send(contactsNotificationUser);
 });
 
@@ -188,5 +188,48 @@ router.post("/contact/conversation", async (req: any, res) => {
         console.error(error.message);
         res.status(500).send("Server error");
     }
+});
+// @route   POST api/notifications/message
+// @desc    create a new Message
+// @access  Private
+router.post("/message", async (req, res) => {
+    let { message, currentRoom, participants } = req.body;
+    let [currentUserProfile, contactProfile] = participants;
+    let messageModelSender = {
+        msg: message,
+        sent: true,
+        sender: {
+            name: currentUserProfile.name,
+            email: currentUserProfile.email,
+            gravatar: currentUserProfile.avatar
+        }
+    };
+    let messageModelReceiver = {
+        msg: message,
+        sent: false,
+        sender: {
+            name: currentUserProfile.name,
+            email: currentUserProfile.email,
+            gravatar: currentUserProfile.avatar
+        }
+    };
+    let messagesCurrentUser: any = await Messages.findById(currentUserProfile._id);
+    let messagesContact: any = await Messages.findById(contactProfile._id);
+    let currentConvesationOnCurrentUser = messagesCurrentUser.messages.find((conv: any) => {
+        return conv.roomId === currentRoom;
+    });
+    let currentConvesationOnContact = messagesContact.messages.find((conv: any) => {
+        return conv.roomId === currentRoom;
+    });
+    currentConvesationOnCurrentUser.messages.push(messageModelSender);
+    currentConvesationOnContact.messages.push(messageModelReceiver);
+    await messagesCurrentUser.save();
+    await messagesContact.save();
+    let responseBody = {
+        messages: currentConvesationOnCurrentUser.messages,
+        participants,
+        roomId: currentRoom
+    };
+    res.send(responseBody);
 });
 export default router;

@@ -30,46 +30,26 @@ server.listen(PORT, () => {
 });
 
 io.on("connection", socket => {
+    // socket.removeAllListeners();
     connections.push(socket.id);
-    console.log("connnected: %s sockets connected", connections.length);
-    console.log(connections);
+    // console.log("connnected: %s sockets connected", connections.length);
+    // console.log(connections);
     socket.on("send-message", () => {
         console.log("message sent");
     });
-    // socket.on("JOIN_ROOM", async body => {
-    //     const { roomId } = body;
-    //     let prevRoom: any;
-    //     if (prevRoom === undefined) {
-    //         await socket.join(roomId);
-    //         await io.to(roomId).emit("JOINED_ROOM", { roomId });
-    //         prevRoom = roomId;
-    //     }
-    //     if(prevRoom !== undefined){
-
-    //     }
-    //     console.log("TCL: roomId", roomId);
-    //     console.log("TCL: prevRoom", prevRoom);
-    //     await socket.leave(prevRoom);
-    // });
-    //Disconnect
     socket.on("SOCKET_LEAVE_ROOM", (joinedRoom: any) => {
-        try {
-            socket.leave(joinedRoom);
-        } catch (error) {
-            console.log(error);
-        }
+        socket.leave(joinedRoom);
     });
     socket.on("SOCKET_JOIN_ROOM", (roomId: any) => {
-        try {
-            socket.leaveAll();
-            socket.join(roomId);
-            io.emit("ROOM_JOINED", roomId);
-        } catch (error) {
-            console.log(error);
-        }
+        socket.join(roomId);
+        io.in(roomId).emit("ROOM_JOINED", roomId);
+    });
+    socket.on("SEND_MESSAGE", (data: any) => {
+        let { message, currentRoom } = data;
+        io.in(currentRoom).emit("NEW_MESSAGE", message);
     });
     socket.on("disconnect", () => {
         connections.splice(connections.indexOf(socket), 1);
-        console.log(`<< ${socket.id} >> disconnected, ${connections.length} sockets left`);
+        // console.log(`<< ${socket.id} >> disconnected, ${connections.length} sockets left`);
     });
 });

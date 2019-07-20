@@ -1,6 +1,7 @@
-import { CONTACTS_LOADED, CLEAR_CONTACTS } from "../actions/types";
+import { CONTACTS_LOADED, CLEAR_CONTACTS, GROUPS_LOADED, EMPTY_GROUPS } from "../actions/types";
 const initialState: any = {
-    contacts: null
+    contacts: null,
+    showingGroups: false
 };
 
 export default function(state = initialState, action: any) {
@@ -9,8 +10,23 @@ export default function(state = initialState, action: any) {
         case CONTACTS_LOADED:
             return {
                 ...state,
+                showingGroups: false,
                 contacts: [...payload]
             };
+
+        case GROUPS_LOADED:
+            return {
+                ...state,
+                contacts: [...payload],
+                showingGroups: true
+            };
+        case EMPTY_GROUPS:
+            return {
+                ...state,
+                contacts: [],
+                showingGroups: true
+            };
+
         case CLEAR_CONTACTS:
             return {
                 contacts: null

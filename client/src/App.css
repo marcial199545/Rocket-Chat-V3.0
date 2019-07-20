@@ -544,10 +544,21 @@ button {
     max-height: 66vh;
     max-width: 80%;
 }
+#groupButton {
+    width: 100%;
+    background-color: transparent;
+    color: bisque;
+    border: none;
+    cursor: pointer;
+}
 .chat__messages {
     flex-grow: 1;
     padding: 4px 14px 0;
     overflow-y: scroll;
+}
+
+.chat__messages ::-webkit-scrollbar {
+    display: none;
 }
 .compose form {
     display: flex;
@@ -751,4 +762,7 @@ button {
         width: 200px;
         margin: auto;
     }
+}
+::-webkit-scrollbar {
+    display: none;
 }

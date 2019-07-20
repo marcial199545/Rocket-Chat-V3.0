@@ -11,9 +11,12 @@ export const LOGIN_FAIL = "LOGIN_FAIL";
 export const LOGOUT = "LOGOUT";
 export const MESSAGES_LOADED = "MESSAGES_LOADED";
 export const CLEAR_MESSAGES = "CLEAR_MESSAGES";
+
 export const ADD_CONTACT = "ADD_CONTACT";
 export const CONTACTS_LOADED = "CONTACTS_LOADED";
+export const GROUPS_LOADED = "GROUPS_LOADED";
 export const CLEAR_CONTACTS = "CLEAR_CONTACTS";
+export const EMPTY_GROUPS = "EMPTY_GROUPS";
 
 export const SOCKET_JOIN_ROOM = "SOCKET_JOIN_ROOM";
 export const SOCKET_LEAVE_ROOM = "SOCKET_LEAVE_ROOM";

@@ -1,6 +1,7 @@
 import React, { Fragment, useState, FormEvent, ChangeEvent } from "react";
 import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { socket } from "../notification/ChatForm";
 import PropTypes from "prop-types";
 import { setAlert } from "../../actions/alert";
 import { registerUser } from "../../actions/auth";
@@ -23,13 +24,13 @@ const Register = ({
     const { name, email, password, password2 } = formData;
     const onChange = (e: ChangeEvent<HTMLInputElement>) =>
         setFormData({ ...formData, [e.target.name]: e.target.value });
-    const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const onSubmit = async (e: FormEvent<HTMLFormElement>, socket: any) => {
         e.preventDefault();
         if (password !== password2) {
             setAlert("Passwords do not match", "danger");
         } else {
             console.log(`success`);
-            registerUser({ name, email, password });
+            registerUser({ name, email, password, socket });
         }
         setFormData({ email: "", password: "", name: "", password2: "" });
     };
@@ -43,7 +44,7 @@ const Register = ({
                 <p className="lead">
                     <i className="fas fa-user" /> Create Your Account
                 </p>
-                <form className="form" onSubmit={e => onSubmit(e)}>
+                <form className="form" onSubmit={e => onSubmit(e, socket)}>
                     <div className="form-group">
                         <input
                             value={name}
