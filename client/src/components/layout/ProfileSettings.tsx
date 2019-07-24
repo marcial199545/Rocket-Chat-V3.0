@@ -17,18 +17,14 @@ const ProfileSettings = ({
         language: "",
         twitter: "",
         facebook: "",
-        linkedin: "",
-        youtube: "",
         instagram: ""
     });
-    const { language, twitter, facebook, linkedin, youtube, instagram } = formData;
+    const { language, twitter, facebook, instagram } = formData;
     useEffect(() => {
         setFormData({
             language: loading || !user.profileSettings.language ? "" : user.profileSettings.language,
             twitter: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.twitter,
             facebook: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.facebook,
-            linkedin: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.linkedin,
-            youtube: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.youtube,
             instagram: loading || !user.profileSettings.socials ? "" : user.profileSettings.socials.instagram
         });
         // eslint-disable-next-line
@@ -97,28 +93,6 @@ const ProfileSettings = ({
                         </div>
 
                         <div className="form-group social-input">
-                            <i className="fab fa-youtube fa-2x" />
-                            <input
-                                value={youtube}
-                                onChange={e => onChange(e)}
-                                type="text"
-                                placeholder="YouTube URL"
-                                name="youtube"
-                            />
-                        </div>
-
-                        <div className="form-group social-input">
-                            <i className="fab fa-linkedin fa-2x" />
-                            <input
-                                value={linkedin}
-                                onChange={e => onChange(e)}
-                                type="text"
-                                placeholder="Linkedin URL"
-                                name="linkedin"
-                            />
-                        </div>
-
-                        <div className="form-group social-input">
                             <i className="fab fa-instagram fa-2x" />
                             <input
                                 value={instagram}
@@ -130,9 +104,11 @@ const ProfileSettings = ({
                         </div>
                     </Fragment>
                 )}
-                <input type="submit" className="btn btn-primary my-1" />
-                <Link className="btn btn-light my-1" to="/dashboard">
-                    Go Back
+                <button type="submit" className="btn btn-primary my-1">
+                    <i className="fas fa-user-edit" />
+                </button>
+                <Link className="btn btn-dark my-1" to="/dashboard">
+                    <i className="fas fa-chevron-left" />
                 </Link>
             </form>
         </Fragment>

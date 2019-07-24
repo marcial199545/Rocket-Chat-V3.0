@@ -27,7 +27,7 @@ const AddContactForm = ({ loading, user, addContact }: { loading: any; user: any
                 </p>
             </div>
             <h1 className="large text-primary">Add Contact</h1>
-            <p className="lead">Enter The Email To Send A Request</p>
+            <p className="lead">Enter The Email To Send A Friend Request</p>
             <form onSubmit={e => onSubmit(e)} className="form">
                 <div className="form-group social-input">
                     <i className="fas fa-user-friends fa-2x" />
@@ -39,9 +39,11 @@ const AddContactForm = ({ loading, user, addContact }: { loading: any; user: any
                         name="email"
                     />
                 </div>
-                <input type="submit" className="btn btn-primary my-1" />
-                <Link className="btn btn-light my-1" to="/dashboard">
-                    Go Back
+                <button type="submit" className="btn btn-primary my-1">
+                    <i className="fas fa-user-plus" />
+                </button>
+                <Link className="btn btn-dark my-1" to="/dashboard">
+                    <i className="fas fa-chevron-left" />
                 </Link>
             </form>
         </Fragment>

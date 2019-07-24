@@ -42,6 +42,27 @@ img {
     margin-top: 4rem;
     margin-bottom: 3rem;
 }
+.container__groupConversation {
+    max-width: 950px;
+    max-height: 230px;
+    margin: 0 auto;
+    padding: 30px;
+    display: flex;
+    overflow-y: scroll;
+    flex-flow: row wrap;
+    justify-content: center;
+}
+.container__participants {
+    max-width: 950px;
+    /* max-height: 230px; */
+    margin: 0 auto;
+    padding: 30px;
+    display: flex;
+    /* overflow-y: scroll; */
+    flex-flow: row wrap;
+    justify-content: center;
+}
+
 .container__friendRequest {
     max-width: 500px;
     background-color: #33333326;
@@ -173,6 +194,15 @@ img {
     background: #2b292945;
     color: #333;
 }
+.badge__contact__addGroup {
+    font-size: 2.1em;
+    height: 80px;
+    margin: 10px 1em;
+    padding-left: 10px;
+    padding-right: 10px;
+    flex: 0 1 20%;
+    border-radius: 20px;
+}
 
 .alert {
     text-align: center;
@@ -198,7 +228,10 @@ img {
     background: var(--light-color);
     color: #333;
 }
-
+.contactName {
+    font-size: 0.5em;
+    margin: auto;
+}
 .btn-dark,
 .bg-dark,
 .badge-dark,
@@ -297,8 +330,16 @@ button {
     font: inherit;
 }
 .social-input {
-    padding-top: 12%;
-    padding-right: 5%;
+    padding-top: 2%;
+    padding-right: 1%;
+}
+.social-input__user {
+    padding-top: 4%;
+    padding-right: 4%;
+}
+.social-input__group {
+    padding-top: 0;
+    padding-right: 0;
 }
 .form .social-input {
     display: flex;
@@ -309,30 +350,25 @@ button {
     width: 4rem;
 }
 
-.social-input i.fa-twitter {
+.social-input i.fa-twitter,
+.social-input__user i.fa-twitter {
     color: #38a1f3;
 }
-.social-input i.fa-facebook {
+.social-input i.fa-facebook,
+.social-input__user i.fa-facebook {
     color: #3b5998;
 }
-.social-input i.fa-instagram {
+.social-input i.fa-instagram,
+.social-input__user i.fa-instagram {
     color: #3f729b;
 }
-.social-input i.fa-youtube {
+.social-input i.fa-youtube,
+.social-input__user i.fa-youtube {
     color: #c4302b;
 }
-.social-input i.fa-linkedin {
+.social-input i.fa-linkedin,
+.social-input__user i.fa-linkedin {
     color: #0077b5;
-}
-
-.table th,
-.table td {
-    padding: 1rem;
-    text-align: left;
-}
-
-.table th {
-    background: var(--light-color);
 }
 
 /* Navbar */

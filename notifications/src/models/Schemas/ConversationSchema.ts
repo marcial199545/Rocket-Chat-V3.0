@@ -7,6 +7,10 @@ const ConversationSchema = new Schema(
             type: String,
             required: true
         },
+        groupName: {
+            type: String,
+            default: "none"
+        },
         flag: {
             type: String,
             default: "private"

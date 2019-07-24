@@ -62,7 +62,11 @@ const ChatSidebar = ({
         return (
             <div className="chat__sidebar">
                 <div id="add-contact-container">
-                    <Link to="/contact/add">Add Contact</Link>
+                    {showingGroups ? (
+                        <Link to="/group/add">Add Group</Link>
+                    ) : (
+                        <Link to="/contact/add">Add Contact</Link>
+                    )}
                     <button
                         id="groupButton"
                         onClick={e => {
@@ -85,7 +89,11 @@ const ChatSidebar = ({
         return (
             <div className="chat__sidebar">
                 <div id="add-contact-container">
-                    <Link to="/contact/add">Add Contact</Link>
+                    {showingGroups ? (
+                        <Link to="/group/add">Add Group</Link>
+                    ) : (
+                        <Link to="/contact/add">Add Contact</Link>
+                    )}
                     <button
                         id="groupButton"
                         onClick={e => {
@@ -104,7 +112,7 @@ const ChatSidebar = ({
     return (
         <div className="chat__sidebar">
             <div id="add-contact-container">
-                <Link to="/contact/add">Add Contact</Link>
+                {showingGroups ? <Link to="/group/add">Add Group</Link> : <Link to="/contact/add">Add Contact</Link>}
                 <button
                     id="groupButton"
                     onClick={e => {

@@ -29,6 +29,7 @@ export const addContact = (socket: any, email: string) => async (dispatch: any) 
         }
     }
 };
+
 // NOTE Clear all contacts
 export const clearContacts = () => (dispatch: any) => {
     dispatch({ type: CLEAR_CONTACTS });
@@ -41,7 +42,7 @@ export const loadContacts = (group?: boolean) => async (dispatch: any) => {
             "Content-Type": "application/json"
         };
         let userID = await axios.get("/api/auth/me/id");
-        let userConversations: any = await axios.post("api/notifications/me/contacts", userID.data, config);
+        let userConversations: any = await axios.post("/api/notifications/me/contacts", userID.data, config);
         if (group) {
             let groupConversations = userConversations.data.conversations.filter((conversation: any) => {
                 return conversation.flag !== "private";

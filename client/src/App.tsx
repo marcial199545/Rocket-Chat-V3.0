@@ -15,6 +15,7 @@ import Alert from "./components/layout/Alert";
 import Landing from "./components/layout/Landing";
 import ProfileSettings from "./components/layout/ProfileSettings";
 import AddContactForm from "./components/users/AddContactForm";
+import AddGroupConversation from "./components/users/AddGroupConversation";
 import friendRequests from "./components/notification/FriendRequests";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
@@ -40,6 +41,7 @@ const App = () => {
                         <PrivateRoute exact path="/dashboard" component={Dashboard} />
                         <PrivateRoute exact path="/profile/settings" component={ProfileSettings} />
                         <PrivateRoute exact path="/contact/add" component={AddContactForm} />
+                        <PrivateRoute exact path="/group/add" component={AddGroupConversation} />
                         <PrivateRoute exact path="/friendRequests" component={friendRequests} />
                         <Route component={Page404} />
                     </Switch>
