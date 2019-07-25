@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserNotification from "../../models/Notifications";
 import Messages from "../../models/Messages";
 import uuid = require("uuid");
+import gravatar from "gravatar";
 const router = Router();
 
 // @route   POST api/notifications
@@ -52,12 +53,18 @@ router.post("/add/contact", async (req: any, res) => {
 // @access  Private
 router.post("/add/contact/request", async (req: any, res) => {
     const { requestedId: userRequestedId } = req.body;
-    const { name: requesterName, email: requesterEmail, avatar: requesterAvatar } = req.body.requesterInfo;
+    const {
+        name: requesterName,
+        email: requesterEmail,
+        avatar: requesterAvatar,
+        _id: requesterId
+    } = req.body.requesterInfo;
     let notificationUser: any = await UserNotification.findById(userRequestedId, { contacts: 1 });
     let contactModel = {
         contactProfile: {
             name: requesterName,
             email: requesterEmail,
+            _id: requesterId,
             avatar: requesterAvatar
         },
         status: "requested"
@@ -72,7 +79,7 @@ router.post("/add/contact/request", async (req: any, res) => {
 // @access  Private
 router.post("/me/contacts", async (req: any, res) => {
     let { _id: userID } = req.body;
-    let contactsNotificationUser: any = await UserNotification.findById(userID, { _id: 0 });
+    let contactsNotificationUser: any = await UserNotification.findById(userID);
     res.send(contactsNotificationUser);
 });
 
@@ -193,43 +200,155 @@ router.post("/contact/conversation", async (req: any, res) => {
 // @desc    create a new Message
 // @access  Private
 router.post("/message", async (req, res) => {
-    let { message, currentRoom, participants } = req.body;
-    let [currentUserProfile, contactProfile] = participants;
+    let { message, currentRoom, participants, currentUserInfo } = req.body;
     let messageModelSender = {
         msg: message,
         sent: true,
         sender: {
-            name: currentUserProfile.name,
-            email: currentUserProfile.email,
-            gravatar: currentUserProfile.avatar
+            name: currentUserInfo.name,
+            email: currentUserInfo.email,
+            gravatar: currentUserInfo.avatar
         }
     };
     let messageModelReceiver = {
         msg: message,
         sent: false,
         sender: {
-            name: currentUserProfile.name,
-            email: currentUserProfile.email,
-            gravatar: currentUserProfile.avatar
+            name: currentUserInfo.name,
+            email: currentUserInfo.email,
+            gravatar: currentUserInfo.avatar
         }
     };
-    let messagesCurrentUser: any = await Messages.findById(currentUserProfile._id);
-    let messagesContact: any = await Messages.findById(contactProfile._id);
+    participants.forEach(async (participant: any) => {
+        let messagesCurrentParticipant: any = await Messages.findById(participant._id);
+        let currentConvesationOnCurrentUser = messagesCurrentParticipant.messages.find((conv: any) => {
+            return conv.roomId === currentRoom;
+        });
+        if (participant._id === currentUserInfo._id) {
+            currentConvesationOnCurrentUser.messages.push(messageModelSender);
+            await messagesCurrentParticipant.save();
+        } else {
+            currentConvesationOnCurrentUser.messages.push(messageModelReceiver);
+            await messagesCurrentParticipant.save();
+        }
+    });
+    let messagesCurrentUser: any = await Messages.findById(currentUserInfo._id);
     let currentConvesationOnCurrentUser = messagesCurrentUser.messages.find((conv: any) => {
         return conv.roomId === currentRoom;
     });
-    let currentConvesationOnContact = messagesContact.messages.find((conv: any) => {
-        return conv.roomId === currentRoom;
-    });
-    currentConvesationOnCurrentUser.messages.push(messageModelSender);
-    currentConvesationOnContact.messages.push(messageModelReceiver);
-    await messagesCurrentUser.save();
-    await messagesContact.save();
     let responseBody = {
         messages: currentConvesationOnCurrentUser.messages,
+        sender: currentUserInfo._id,
+        messageSender: messageModelSender,
+        messageReceiver: messageModelReceiver,
         participants,
         roomId: currentRoom
     };
     res.send(responseBody);
+});
+// @route   POST api/notifications/group/mesage
+// @desc    create a new group Message
+// @access  Private
+router.post("/group/mesage", async (req, res) => {
+    try {
+        let { message, currentRoom, participants, currentUserInfo } = req.body;
+        let messageModelSender = {
+            msg: message,
+            sent: true,
+            sender: {
+                name: currentUserInfo.name,
+                email: currentUserInfo.email,
+                gravatar: currentUserInfo.avatar
+            }
+        };
+        let messageModelReceiver = {
+            msg: message,
+            sent: false,
+            sender: {
+                name: currentUserInfo.name,
+                email: currentUserInfo.email,
+                gravatar: currentUserInfo.avatar
+            }
+        };
+        participants.forEach(async (participant: any) => {
+            let messagesCurrentParticipant: any = await Messages.findById(participant._id);
+            let currentConvesationOnCurrentUser = messagesCurrentParticipant.messages.find((conv: any) => {
+                return conv.roomId === currentRoom;
+            });
+            if (participant._id === currentUserInfo._id) {
+                currentConvesationOnCurrentUser.messages.push(messageModelSender);
+                await messagesCurrentParticipant.save();
+            } else {
+                currentConvesationOnCurrentUser.messages.push(messageModelReceiver);
+                await messagesCurrentParticipant.save();
+            }
+        });
+        let messagesCurrentUser: any = await Messages.findById(currentUserInfo._id);
+        let currentConvesationOnCurrentUser = messagesCurrentUser.messages.find((conv: any) => {
+            return conv.roomId === currentRoom;
+        });
+        let responseBody = {
+            messages: currentConvesationOnCurrentUser.messages,
+            sender: currentUserInfo._id,
+            messageSender: messageModelSender,
+            messageReceiver: messageModelReceiver,
+            participants,
+            roomId: currentRoom
+        };
+
+        res.send(responseBody);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+});
+// @route   POST api/notifications/group/conversation
+// @desc    create a group conversation
+// @access  Private
+router.post("/group/conversation", async (req, res) => {
+    try {
+        const { participants, groupName } = req.body;
+        const roomId = uuid.v4();
+        const avatar = gravatar.url(roomId, { s: "200", r: "pg", d: "identicon" });
+        const groupConversationModel = {
+            groupName,
+            participants,
+            flag: "group",
+            roomId,
+            avatar
+        };
+
+        const messagesModel = {
+            roomId: groupConversationModel.roomId,
+            messages: []
+        };
+
+        participants.forEach(async (participant: any) => {
+            let participantConversations: any = await UserNotification.findById(participant._id, { conversations: 1 });
+            participantConversations.conversations.push(groupConversationModel);
+            await participantConversations.save();
+        });
+        participants.forEach(async (participant: any) => {
+            let participantMessages: any = await Messages.findById(participant._id, { messages: 1 });
+            participantMessages.messages.push(messagesModel);
+            await participantMessages.save();
+        });
+
+        res.send("success");
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+});
+
+// @route   POST api/notifications/group/conversation/messages
+// @desc    load messages of a user
+// @access  Private
+router.post("/group/conversation/messages", async (req, res) => {
+    let resMessages: any = await Messages.findById(req.body.id);
+    let messagesOfConversation = resMessages.messages.find((message: any) => {
+        return message.roomId === req.body.roomId;
+    });
+    res.send(messagesOfConversation.messages);
 });
 export default router;

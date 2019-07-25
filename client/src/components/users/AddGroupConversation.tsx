@@ -5,6 +5,7 @@ import Spinner from "../layout/Spinner";
 import PropTypes from "prop-types";
 import { loadContacts } from "../../actions/contacts";
 import { addGroupConversation } from "../../actions/groups";
+import Alert from "../layout/Alert";
 // eslint-disable-next-line
 import { socket } from "../notification/ChatForm";
 import uuid from "uuid";
@@ -13,11 +14,14 @@ const AddGroupConversation = ({
     loading,
     user,
     contacts,
+    history,
     addGroupConversation,
     loadContacts
 }: {
     loading: any;
     user: any;
+    history: any;
+    dispatch: any;
     contacts: any;
     addGroupConversation: any;
     loadContacts: any;
@@ -34,8 +38,9 @@ const AddGroupConversation = ({
     const { participants, groupName } = formData;
     const onSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        // addGroupConversation(socket, { email, groupName });
-        // setFormData({ email: "", groupName: "" });
+        addGroupConversation(socket, { participants, groupName }, history);
+        setFormData({ groupName: "", participants });
+        history.push("/dashboard");
     };
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -57,7 +62,6 @@ const AddGroupConversation = ({
         }
         // @ts-ignore
         setFormData({ ...formData, participants: [...participants, contact] });
-        contact.added = true;
     };
 
     return loading ? (
@@ -71,6 +75,7 @@ const AddGroupConversation = ({
             </div>
             <h1 className="large text-primary">Create a new Group Conversation</h1>
             <p className="lead">Add Group Participants</p>
+            <Alert />
             <div className="container__groupConversation">
                 {contacts !== null &&
                     contacts

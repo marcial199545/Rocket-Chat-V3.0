@@ -13,6 +13,10 @@ const ContactSchema = new Schema(
             },
             roomId: {
                 type: String
+            },
+            _id: {
+                type: Schema.Types.ObjectId,
+                ref: "users"
             }
         },
         status: {

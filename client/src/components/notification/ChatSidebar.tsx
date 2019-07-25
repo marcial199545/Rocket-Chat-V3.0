@@ -1,32 +1,35 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
-import { loadMessages } from "../../actions/messages";
-import { joinRoom, leaveRoom } from "../../actions/sockets";
+import { loadMessages, loadGroupMessages, clearMessages } from "../../actions/messages";
+import { joinRoom, leaveRoom, joinAllRooms } from "../../actions/sockets";
 import { Link } from "react-router-dom";
 import { loadContacts } from "../../actions/contacts";
 import PropTypes from "prop-types";
 import uuid from "uuid";
 import { socket } from "./ChatForm";
 import Spinner from "../layout/Spinner";
-
 const ChatSidebar = ({
     loadContacts,
+    clearMessages,
     loadMessages,
+    loadGroupMessages,
     joinRoom,
+    joinAllRooms,
     leaveRoom,
     currentRoom,
     contacts,
-    showingGroups,
-    dispatch
+    showingGroups
 }: {
     loadContacts: any;
+    clearMessages: any;
     loadMessages: any;
+    loadGroupMessages: any;
     joinRoom: any;
+    joinAllRooms: any;
     leaveRoom: any;
     currentRoom: any;
     contacts: any;
     showingGroups: any;
-    dispatch?: any;
 }) => {
     useEffect(() => {
         loadContacts();
@@ -52,10 +55,24 @@ const ChatSidebar = ({
     };
     const handleClickGroup = (e: any) => {
         e.preventDefault();
+        clearMessages();
         if (!showingGroups) {
             loadContacts(true);
         } else if (showingGroups) {
             loadContacts();
+        }
+    };
+    const handleJoinGroupClick = (e: any, conversation: any) => {
+        e.preventDefault();
+        loadGroupMessages(conversation);
+        if (currentRoom === conversation.roomId) {
+            return;
+        }
+        if (currentRoom === null) {
+            joinRoom(socket, conversation.roomId);
+        } else if (currentRoom !== null) {
+            leaveRoom(socket, currentRoom);
+            joinRoom(socket, conversation.roomId);
         }
     };
     if (contacts.length === 0 && showingGroups) {
@@ -79,6 +96,48 @@ const ChatSidebar = ({
                 <div className="display display-info">
                     No Groups <i className="fas fa-poop" />{" "}
                 </div>
+            </div>
+        );
+    }
+    if (showingGroups && contacts.length > 0) {
+        joinAllRooms(socket, contacts, true);
+        return (
+            <div className="chat__sidebar">
+                <div id="add-contact-container">
+                    {showingGroups ? (
+                        <Link to="/group/add">Add Group</Link>
+                    ) : (
+                        <Link to="/contact/add">Add Contact</Link>
+                    )}
+                    <button
+                        id="groupButton"
+                        onClick={e => {
+                            handleClickGroup(e);
+                        }}
+                    >
+                        {showingGroups ? <i className="fas fa-user-friends" /> : <i className="fas fa-users" />}
+                    </button>
+                </div>
+                {contacts.map((conversation: any) => {
+                    return (
+                        <Fragment key={uuid.v4()}>
+                            <div className="contact user__contact__friend">
+                                <div>
+                                    <img src={conversation.avatar} alt="avatar of conversation" />
+                                    <span> {conversation.groupName}</span>
+                                </div>
+                                <div>
+                                    <button
+                                        onClick={e => handleJoinGroupClick(e, conversation)}
+                                        className="btn btn-light contact__button"
+                                    >
+                                        send message
+                                    </button>
+                                </div>
+                            </div>
+                        </Fragment>
+                    );
+                })}
             </div>
         );
     }
@@ -109,6 +168,7 @@ const ChatSidebar = ({
             </div>
         );
     }
+    joinAllRooms(socket, contacts);
     return (
         <div className="chat__sidebar">
             <div id="add-contact-container">
@@ -148,7 +208,10 @@ const ChatSidebar = ({
 ChatSidebar.propTypes = {
     loadContacts: PropTypes.func,
     loadMessages: PropTypes.func,
+    clearMessages: PropTypes.func,
+    loadGroupMessages: PropTypes.func,
     joinRoom: PropTypes.func,
+    joinAllRooms: PropTypes.func,
     leaveRoom: PropTypes.func,
     contacts: PropTypes.array
 };
@@ -161,5 +224,5 @@ const mapStateToProps = (state: any) => ({
 
 export default connect(
     mapStateToProps,
-    { loadContacts, loadMessages, joinRoom, leaveRoom }
+    { loadContacts, loadMessages, joinRoom, joinAllRooms, leaveRoom, loadGroupMessages, clearMessages }
 )(ChatSidebar);

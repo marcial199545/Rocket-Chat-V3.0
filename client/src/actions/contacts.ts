@@ -15,6 +15,7 @@ export const addContact = (socket: any, email: string) => async (dispatch: any) 
         let reqDataForFriendRequest = {
             requestedId: contactInfo.data.contact._id,
             requesterInfo: {
+                _id: currentUserInfo.data._id,
                 name: currentUserInfo.data.name,
                 email: currentUserInfo.data.email,
                 avatar: currentUserInfo.data.avatar
@@ -47,20 +48,18 @@ export const loadContacts = (group?: boolean) => async (dispatch: any) => {
             let groupConversations = userConversations.data.conversations.filter((conversation: any) => {
                 return conversation.flag !== "private";
             });
-            if (groupConversations.contacts === undefined) {
+            if (groupConversations.length === 0) {
                 dispatch(clearContacts());
                 dispatch({
                     type: EMPTY_GROUPS
                 });
                 return;
             }
-            let contacts = groupConversations.contacts.filter((contact: any) => {
-                return contact.status !== "rejected";
-            });
+
             dispatch(clearContacts());
             dispatch({
                 type: GROUPS_LOADED,
-                payload: contacts
+                payload: groupConversations
             });
             return;
         }

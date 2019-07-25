@@ -2,17 +2,21 @@ import React, { useState, Fragment, ChangeEvent } from "react";
 import io from "socket.io-client";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { sendMessage } from "../../actions/sockets";
+import { sendMessage, sendGroupMessage } from "../../actions/sockets";
 // eslint-disable-next-line
 export const socket = io("localhost:5001");
 const ChatForm = ({
     currentRoom,
     participants,
-    sendMessage
+    showingGroups,
+    sendMessage,
+    sendGroupMessage
 }: {
     currentRoom: any;
     participants: any;
+    showingGroups: any;
     sendMessage: any;
+    sendGroupMessage: any;
 }) => {
     const [formData, setFormData] = useState({
         message: ""
@@ -23,10 +27,17 @@ const ChatForm = ({
     const onSubmit = async (e: any) => {
         e.preventDefault();
         let message = e.target.elements.message.value;
+        if (showingGroups) {
+            if (message.trim() !== "") {
+                sendGroupMessage(socket, { message, currentRoom, participants });
+                setFormData({ message: "" });
+                return;
+            }
+        }
         if (message.trim() !== "") {
             sendMessage(socket, { message, currentRoom, participants });
+            setFormData({ message: "" });
         }
-        setFormData({ message: "" });
     };
     return (
         <Fragment>
@@ -52,15 +63,18 @@ const ChatForm = ({
 ChatForm.propTypes = {
     currentRoom: PropTypes.string,
     participants: PropTypes.array,
-    sendMessage: PropTypes.func
+    showingGroups: PropTypes.bool,
+    sendMessage: PropTypes.func,
+    sendGroupMessage: PropTypes.func
 };
 
 const mapStateToProps = (state: any) => ({
     currentRoom: state.sockets.currentRoom,
+    showingGroups: state.contacts.showingGroups,
     participants: state.messages.participants
 });
 
 export default connect(
     mapStateToProps,
-    { sendMessage }
+    { sendMessage, sendGroupMessage }
 )(ChatForm);

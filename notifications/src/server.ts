@@ -45,8 +45,8 @@ io.on("connection", socket => {
         io.in(roomId).emit("ROOM_JOINED", roomId);
     });
     socket.on("SEND_MESSAGE", (data: any) => {
-        let { message, currentRoom } = data;
-        io.in(currentRoom).emit("NEW_MESSAGE", message);
+        let { roomId } = data;
+        io.in(roomId).emit("NEW_MESSAGE", data);
     });
     socket.on("disconnect", () => {
         connections.splice(connections.indexOf(socket), 1);

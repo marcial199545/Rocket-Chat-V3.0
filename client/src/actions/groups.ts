@@ -1,20 +1,28 @@
 // import { CONTACTS_LOADED, CLEAR_CONTACTS, GROUPS_LOADED, EMPTY_GROUPS } from "./types";
 import { setAlert } from "./alert";
 import axios from "axios";
-export const addGroupConversation = (socket: any, { email, groupName }: { email: string; groupName: string }) => async (
-    dispatch: any
-): Promise<void> => {
+
+export const addGroupConversation = (socket: any, data: any, history: any) => async (dispatch: any): Promise<void> => {
     try {
-        let contactInfo: any = await axios.post("/api/users/contact", { email });
+        let { participants, groupName } = data;
+        if (participants.length === 0) {
+            return dispatch(setAlert("Add at least one participant", "warning"));
+        }
         let currentUserInfo: any = await axios.get("/api/users/me");
-        if (contactInfo.data.contact.email === currentUserInfo.data.email) {
-            return dispatch(setAlert("you can not add yourself in the conversation", "warning"));
+        if (
+            !participants.find((participant: any) => {
+                return participant.email === currentUserInfo.data.email;
+            })
+        ) {
+            participants.unshift(currentUserInfo.data);
         }
-        console.log(currentUserInfo.data);
+        await axios.post("/api/notifications/group/conversation", { participants, groupName });
+        // history.push("/dashboard");
+        // dispatch({
+        //     type: "type",
+        //     payload: "payload"
+        // });
     } catch (error) {
-        const errors = error.response.data.errors;
-        if (errors) {
-            errors.forEach((error: any) => dispatch(setAlert(error.msg, "danger")));
-        }
+        console.log(error);
     }
 };

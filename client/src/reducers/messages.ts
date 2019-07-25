@@ -1,4 +1,4 @@
-import { MESSAGES_LOADED, CLEAR_MESSAGES } from "../actions/types";
+import { MESSAGES_LOADED, CLEAR_MESSAGES, ADD_MESSAGE } from "../actions/types";
 const initialState: any = {
     messages: null,
     loading: true,
@@ -16,6 +16,11 @@ export default function(state = initialState, action: any) {
                 loading: false,
                 participants: [...payload.participants],
                 roomId: payload.roomId
+            };
+        case ADD_MESSAGE:
+            return {
+                ...state,
+                messages: [...state.messages, payload]
             };
         case CLEAR_MESSAGES:
             return {

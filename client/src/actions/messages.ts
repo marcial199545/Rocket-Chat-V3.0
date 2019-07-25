@@ -2,6 +2,7 @@ import { MESSAGES_LOADED, CLEAR_MESSAGES } from "./types";
 import { setAlert } from "./alert";
 import axios from "axios";
 import { autoScroll } from "../helpers";
+
 export const loadMessages = (contact: any) => async (dispatch: any) => {
     try {
         let currentUserInfo: any = await axios.get("/api/users/me");
@@ -35,5 +36,42 @@ export const loadMessages = (contact: any) => async (dispatch: any) => {
         if (errors) {
             errors.forEach((error: any) => dispatch(setAlert(error.msg, "danger")));
         }
+    }
+};
+export const loadGroupMessages = (conversation: any) => async (dispatch: any): Promise<void> => {
+    try {
+        const currentUser = await axios.get("/api/users/me");
+        const body = {
+            id: currentUser.data._id,
+            roomId: conversation.roomId
+        };
+        let messages = await axios.post(`/api/notifications/group/conversation/messages`, body);
+        const payload = {
+            messages: messages.data,
+            participants: conversation.participants,
+            roomId: conversation.roomId
+        };
+        dispatch({
+            type: CLEAR_MESSAGES
+        });
+        dispatch({
+            type: MESSAGES_LOADED,
+            payload
+        });
+
+        setTimeout(() => {
+            autoScroll();
+        }, 200);
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const clearMessages = () => async (dispatch: any): Promise<void> => {
+    try {
+        dispatch({
+            type: CLEAR_MESSAGES
+        });
+    } catch (error) {
+        console.log(error);
     }
 };

@@ -1,10 +1,15 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { connect } from "react-redux";
 import Spinner from "../layout/Spinner";
 import User from "../users/User";
 import Chat from "../notification/Chat";
+import PropTypes from "prop-types";
+import { clearMessages } from "../../actions/messages";
 
-const Dashboard = ({ loading }: { loading: boolean }) => {
+const Dashboard = ({ loading, clearMessages }: { loading?: boolean; clearMessages?: any }) => {
+    useEffect(() => {
+        clearMessages();
+    });
     return loading ? (
         <Spinner />
     ) : (
@@ -19,8 +24,16 @@ const Dashboard = ({ loading }: { loading: boolean }) => {
         </Fragment>
     );
 };
+Dashboard.propTypes = {
+    loading: PropTypes.bool,
+    clearMessages: PropTypes.func
+};
+
 const mapStateToProps = (state: any) => ({
     loading: state.auth.loading
 });
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(
+    mapStateToProps,
+    { clearMessages }
+)(Dashboard);

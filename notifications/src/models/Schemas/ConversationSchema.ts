@@ -14,6 +14,9 @@ const ConversationSchema = new Schema(
         flag: {
             type: String,
             default: "private"
+        },
+        avatar: {
+            type: String
         }
     },
     {
