@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../../actions/auth";
 import { socket } from "../notification/ChatForm";
-
+import { FormattedMessage } from "react-intl";
 const Navbar = ({ isAuthenticated, loading, logout }: { isAuthenticated: any; loading: any; logout: any }) => {
     const handleLogout = (socket: any) => {
         logout(socket);
@@ -13,7 +13,10 @@ const Navbar = ({ isAuthenticated, loading, logout }: { isAuthenticated: any; lo
         <ul>
             <li>
                 <Link to="/dashboard">
-                    <i className="fas fa-home" /> <span className="hide-sm">Dashboard</span>
+                    <i className="fas fa-home" />{" "}
+                    <span className="hide-sm">
+                        <FormattedMessage id="nav-dashboard" defaultMessage="Dashboard" />
+                    </span>
                 </Link>
             </li>
             <li>
@@ -23,7 +26,10 @@ const Navbar = ({ isAuthenticated, loading, logout }: { isAuthenticated: any; lo
                     }}
                     href="#!"
                 >
-                    <i className="fas fa-sign-out-alt" /> <span className="hide-sm">Logout</span>
+                    <i className="fas fa-sign-out-alt" />{" "}
+                    <span className="hide-sm">
+                        <FormattedMessage id="nav-logout" defaultMessage="Logout" />
+                    </span>
                 </a>
             </li>
         </ul>

@@ -1,19 +1,27 @@
 import React, { useEffect, Fragment } from "react";
 import { connect } from "react-redux";
 import { loadMessages, loadGroupMessages, clearMessages } from "../../actions/messages";
-import { joinRoom, leaveRoom, joinAllRooms } from "../../actions/sockets";
-import { Link } from "react-router-dom";
-import { loadContacts } from "../../actions/contacts";
+import { Link, withRouter } from "react-router-dom";
 import PropTypes from "prop-types";
 import uuid from "uuid";
+
+import { joinRoom, leaveRoom, joinAllRooms } from "../../actions/sockets";
+import { addCurrentGroup } from "../../actions/groups";
+import { loadContacts } from "../../actions/contacts";
+
 import { socket } from "./ChatForm";
 import Spinner from "../layout/Spinner";
+
+import { FormattedMessage } from "react-intl";
+
 const ChatSidebar = ({
     loadContacts,
     clearMessages,
     loadMessages,
     loadGroupMessages,
     joinRoom,
+    addCurrentGroup,
+    history,
     joinAllRooms,
     leaveRoom,
     currentRoom,
@@ -24,7 +32,9 @@ const ChatSidebar = ({
     clearMessages: any;
     loadMessages: any;
     loadGroupMessages: any;
+    addCurrentGroup: any;
     joinRoom: any;
+    history: any;
     joinAllRooms: any;
     leaveRoom: any;
     currentRoom: any;
@@ -62,6 +72,11 @@ const ChatSidebar = ({
             loadContacts();
         }
     };
+    // const handleEditGroup = (e: any, conversation: any) => {
+    //     e.preventDefault();
+    //     addCurrentGroup(conversation);
+    //     history.push("/group/edit");
+    // };
     const handleJoinGroupClick = (e: any, conversation: any) => {
         e.preventDefault();
         loadGroupMessages(conversation);
@@ -80,9 +95,13 @@ const ChatSidebar = ({
             <div className="chat__sidebar">
                 <div id="add-contact-container">
                     {showingGroups ? (
-                        <Link to="/group/add">Add Group</Link>
+                        <Link to="/group/add">
+                            <FormattedMessage id="chatSide-add-Group" defaultMessage="Add Group" />
+                        </Link>
                     ) : (
-                        <Link to="/contact/add">Add Contact</Link>
+                        <Link to="/contact/add">
+                            <FormattedMessage id="chatSide-add-Contact" defaultMessage="Add Contact" />
+                        </Link>
                     )}
                     <button
                         id="groupButton"
@@ -94,7 +113,8 @@ const ChatSidebar = ({
                     </button>
                 </div>
                 <div className="display display-info">
-                    No Groups <i className="fas fa-poop" />{" "}
+                    <FormattedMessage id="chatSide-No-Groups" defaultMessage="No Groups" />{" "}
+                    <i className="fas fa-poop" />{" "}
                 </div>
             </div>
         );
@@ -105,9 +125,13 @@ const ChatSidebar = ({
             <div className="chat__sidebar">
                 <div id="add-contact-container">
                     {showingGroups ? (
-                        <Link to="/group/add">Add Group</Link>
+                        <Link to="/group/add">
+                            <FormattedMessage id="chatSide-add-Group" defaultMessage="Add Group" />
+                        </Link>
                     ) : (
-                        <Link to="/contact/add">Add Contact</Link>
+                        <Link to="/contact/add">
+                            <FormattedMessage id="chatSide-add-Contact" defaultMessage="Add Contact" />
+                        </Link>
                     )}
                     <button
                         id="groupButton"
@@ -123,7 +147,11 @@ const ChatSidebar = ({
                         <Fragment key={uuid.v4()}>
                             <div className="contact user__contact__friend">
                                 <div>
-                                    <img src={conversation.avatar} alt="avatar of conversation" />
+                                    <img
+                                        className="contact__avatar"
+                                        src={conversation.avatar}
+                                        alt="avatar of conversation"
+                                    />
                                     <span> {conversation.groupName}</span>
                                 </div>
                                 <div>
@@ -133,6 +161,12 @@ const ChatSidebar = ({
                                     >
                                         send message
                                     </button>
+                                    {/* <button
+                                        onClick={e => handleEditGroup(e, conversation)}
+                                        className="btn btn-light contact__button"
+                                    >
+                                        Edit Group
+                                    </button> */}
                                 </div>
                             </div>
                         </Fragment>
@@ -149,9 +183,13 @@ const ChatSidebar = ({
             <div className="chat__sidebar">
                 <div id="add-contact-container">
                     {showingGroups ? (
-                        <Link to="/group/add">Add Group</Link>
+                        <Link to="/group/add">
+                            <FormattedMessage id="chatSide-add-Group" defaultMessage="Add Group" />
+                        </Link>
                     ) : (
-                        <Link to="/contact/add">Add Contact</Link>
+                        <Link to="/contact/add">
+                            <FormattedMessage id="chatSide-add-Contact" defaultMessage="Add Contact" />
+                        </Link>
                     )}
                     <button
                         id="groupButton"
@@ -163,7 +201,8 @@ const ChatSidebar = ({
                     </button>
                 </div>
                 <div className="display display-info">
-                    No Friends <i className="fas fa-poop" />
+                    <FormattedMessage id="chatSide-No-Contacts" defaultMessage="No Friends" />{" "}
+                    <i className="fas fa-poop" />
                 </div>
             </div>
         );
@@ -172,7 +211,15 @@ const ChatSidebar = ({
     return (
         <div className="chat__sidebar">
             <div id="add-contact-container">
-                {showingGroups ? <Link to="/group/add">Add Group</Link> : <Link to="/contact/add">Add Contact</Link>}
+                {showingGroups ? (
+                    <Link to="/group/add">
+                        <FormattedMessage id="chatSide-add-Group" defaultMessage="Add Group" />
+                    </Link>
+                ) : (
+                    <Link to="/contact/add">
+                        <FormattedMessage id="chatSide-add-Contact" defaultMessage="Add Contact" />
+                    </Link>
+                )}
                 <button
                     id="groupButton"
                     onClick={e => {
@@ -195,7 +242,7 @@ const ChatSidebar = ({
                                     onClick={e => handleClick(e, contact.contactProfile)}
                                     className="btn btn-light contact__button"
                                 >
-                                    send message
+                                    <FormattedMessage id="chatSide-profile-sendMessage" defaultMessage="Add Contact" />
                                 </button>
                             </div>
                         </div>
@@ -207,6 +254,7 @@ const ChatSidebar = ({
 };
 ChatSidebar.propTypes = {
     loadContacts: PropTypes.func,
+    addCurrentGroup: PropTypes.func,
     loadMessages: PropTypes.func,
     clearMessages: PropTypes.func,
     loadGroupMessages: PropTypes.func,
@@ -221,8 +269,19 @@ const mapStateToProps = (state: any) => ({
     showingGroups: state.contacts.showingGroups,
     currentRoom: state.sockets.currentRoom
 });
-
-export default connect(
-    mapStateToProps,
-    { loadContacts, loadMessages, joinRoom, joinAllRooms, leaveRoom, loadGroupMessages, clearMessages }
-)(ChatSidebar);
+export default withRouter(
+    //@ts-ignore
+    connect(
+        mapStateToProps,
+        {
+            loadContacts,
+            loadMessages,
+            joinRoom,
+            joinAllRooms,
+            leaveRoom,
+            loadGroupMessages,
+            clearMessages,
+            addCurrentGroup
+        }
+    )(ChatSidebar)
+);

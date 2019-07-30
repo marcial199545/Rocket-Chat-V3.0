@@ -17,6 +17,8 @@ export const CONTACTS_LOADED = "CONTACTS_LOADED";
 export const GROUPS_LOADED = "GROUPS_LOADED";
 export const CLEAR_CONTACTS = "CLEAR_CONTACTS";
 export const EMPTY_GROUPS = "EMPTY_GROUPS";
+export const ADD_GROUP = "ADD_GROUP";
+export const CLEAR_GROUP = "CLEAR_GROUP";
 
 export const SOCKET_JOIN_ROOM = "SOCKET_JOIN_ROOM";
 export const SOCKET_LEAVE_ROOM = "SOCKET_LEAVE_ROOM";

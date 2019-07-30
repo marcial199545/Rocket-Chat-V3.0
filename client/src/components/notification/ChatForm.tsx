@@ -5,15 +5,18 @@ import PropTypes from "prop-types";
 import { sendMessage, sendGroupMessage } from "../../actions/sockets";
 // eslint-disable-next-line
 export const socket = io("localhost:5001");
+
 const ChatForm = ({
     currentRoom,
     participants,
     showingGroups,
+    user,
     sendMessage,
     sendGroupMessage
 }: {
     currentRoom: any;
     participants: any;
+    user: any;
     showingGroups: any;
     sendMessage: any;
     sendGroupMessage: any;
@@ -48,7 +51,15 @@ const ChatForm = ({
                     value={message}
                     onChange={e => onChange(e)}
                     type="text"
-                    placeholder="Message"
+                    placeholder={
+                        user.profileSettings.language === "en" || user === null
+                            ? "message"
+                            : user.profileSettings.language === "es"
+                            ? "mensaje"
+                            : user.profileSettings.language === "de"
+                            ? "Natchricth"
+                            : "メッセージ"
+                    }
                     name="message"
                 />
                 {currentRoom && (
@@ -63,6 +74,7 @@ const ChatForm = ({
 ChatForm.propTypes = {
     currentRoom: PropTypes.string,
     participants: PropTypes.array,
+    user: PropTypes.object,
     showingGroups: PropTypes.bool,
     sendMessage: PropTypes.func,
     sendGroupMessage: PropTypes.func
@@ -71,9 +83,9 @@ ChatForm.propTypes = {
 const mapStateToProps = (state: any) => ({
     currentRoom: state.sockets.currentRoom,
     showingGroups: state.contacts.showingGroups,
-    participants: state.messages.participants
+    participants: state.messages.participants,
+    user: state.auth.user
 });
-
 export default connect(
     mapStateToProps,
     { sendMessage, sendGroupMessage }

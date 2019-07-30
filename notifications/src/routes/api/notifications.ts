@@ -340,6 +340,77 @@ router.post("/group/conversation", async (req, res) => {
         res.status(500).send("Server error");
     }
 });
+// @route   POST api/notifications/group/conversation
+// @desc    create a group conversation
+// @access  Private
+router.post("/group/conversation", async (req, res) => {
+    try {
+        const { participants, groupName, currentConversation, messages } = req.body;
+        const roomId = uuid.v4();
+        const avatar = gravatar.url(roomId, { s: "200", r: "pg", d: "identicon" });
+        const groupConversationModel = {
+            groupName,
+            participants,
+            flag: "group",
+            roomId: currentConversation ? currentConversation.roomId : roomId,
+            avatar: currentConversation ? currentConversation.avatar : avatar
+        };
+
+        const messagesModel = {
+            roomId: groupConversationModel.roomId,
+            messages: messages ? [...messages] : []
+        };
+
+        participants.forEach(async (participant: any) => {
+            let participantConversations: any = await UserNotification.findById(participant._id, { conversations: 1 });
+            participantConversations.conversations.push(groupConversationModel);
+            await participantConversations.save();
+        });
+        participants.forEach(async (participant: any) => {
+            let participantMessages: any = await Messages.findById(participant._id, { messages: 1 });
+            participantMessages.messages.push(messagesModel);
+            await participantMessages.save();
+        });
+
+        res.send("success");
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+});
+// @route   POST api/notifications/group/conversation/edit
+// @desc    edit a group conversation
+// @access  Private
+router.put("/group/conversation/edit", async (req, res) => {
+    try {
+        const {
+            participants: newParticipants,
+            groupName: newGroupName,
+            currentConversation: oldConversation
+        } = req.body;
+        //errase previous conversation and messages
+        oldConversation.participants.forEach(async (participant: any) => {
+            let participantConversations: any = await UserNotification.findById(participant._id, { conversations: 1 });
+            let convRoomId = participantConversations.conversations.findIndex((conversation: any) => {
+                return conversation.roomId === oldConversation.roomId;
+            });
+            participantConversations.conversations.splice(convRoomId, 1);
+
+            let participantMessages: any = await Messages.findById(participant._id, { messages: 1 });
+            let messagesRoomId = participantMessages.messages.findIndex((conversation: any) => {
+                return conversation.roomId === oldConversation.roomId;
+            });
+            participantMessages.messages.splice(messagesRoomId, 1);
+
+            await participantConversations.save();
+            await participantMessages.save();
+        });
+        res.send("success");
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+});
 
 // @route   POST api/notifications/group/conversation/messages
 // @desc    load messages of a user

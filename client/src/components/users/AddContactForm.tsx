@@ -5,6 +5,7 @@ import Spinner from "../layout/Spinner";
 import PropTypes from "prop-types";
 import { addContact } from "../../actions/contacts";
 import { socket } from "../notification/ChatForm";
+import { FormattedMessage } from "react-intl";
 const AddContactForm = ({ loading, user, addContact }: { loading: any; user: any; addContact: any }) => {
     const [formData, setFormData] = useState({
         email: ""
@@ -26,8 +27,12 @@ const AddContactForm = ({ loading, user, addContact }: { loading: any; user: any
                     <img className="user__avatar" src={user && user.avatar} alt="" /> <span> {user && user.name}</span>
                 </p>
             </div>
-            <h1 className="large text-primary">Add Contact</h1>
-            <p className="lead">Enter The Email To Send A Friend Request</p>
+            <h1 className="large text-primary">
+                <FormattedMessage id="addContact-addContact" defaultMessage="Add Contact" />
+            </h1>
+            <p className="lead">
+                <FormattedMessage id="addContact-info" defaultMessage="Enter The Email To Send A Friend Request" />
+            </p>
             <form onSubmit={e => onSubmit(e)} className="form">
                 <div className="form-group social-input">
                     <i className="fas fa-user-friends fa-2x" />
@@ -35,7 +40,15 @@ const AddContactForm = ({ loading, user, addContact }: { loading: any; user: any
                         value={email}
                         onChange={e => onChange(e)}
                         type="email"
-                        placeholder="Contact Email"
+                        placeholder={
+                            user.profileSettings.language === "en" || user === null
+                                ? "Contact E-mail"
+                                : user.profileSettings.language === "es"
+                                ? "E-mail del contacto"
+                                : user.profileSettings.language === "de"
+                                ? "Kontakt E-mail"
+                                : "連絡先メールアドレス"
+                        }
                         name="email"
                     />
                 </div>

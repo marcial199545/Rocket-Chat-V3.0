@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 import { handleFriendRequest, loadContacts, clearContacts } from "../../actions/contacts";
 import { Link } from "react-router-dom";
+import { FormattedMessage } from "react-intl";
 const FriendRequests = ({
     contacts,
     loadContacts,
@@ -45,9 +46,15 @@ const FriendRequests = ({
                 {friendRequest.length === 0 ? (
                     <Fragment>
                         <h1 className="display-1">
-                            No friend request <i className="fas fa-poop" />
+                            <FormattedMessage id="friendRequests-noFriends-title" defaultMessage="No friend request" />{" "}
+                            <i className="fas fa-poop" />
                         </h1>
-                        <p className="lead">Sorry but you do not have any friend request</p>
+                        <p className="lead">
+                            <FormattedMessage
+                                id="friendRequests-noFriends-text"
+                                defaultMessage="Sorry but you do not have any friend request"
+                            />
+                        </p>
                     </Fragment>
                 ) : (
                     friendRequest.map((contact: any) => {
@@ -65,14 +72,14 @@ const FriendRequests = ({
                                             name="accept"
                                             className="btn btn-light contact__button"
                                         >
-                                            accept
+                                            <FormattedMessage id="friendRequests-accept" defaultMessage="Accept" />
                                         </button>
                                         <button
                                             onClick={e => handleClick(e, { email: contact.contactProfile.email })}
                                             className="btn btn-light contact__button contact__button__danger"
                                             name="rejected"
                                         >
-                                            reject
+                                            <FormattedMessage id="friendRequests-reject" defaultMessage="Reject" />
                                         </button>
                                     </div>
                                 </div>
@@ -80,7 +87,9 @@ const FriendRequests = ({
                         );
                     })
                 )}
-                <Link to="/dashboard">Go Home</Link>
+                <Link to="/dashboard">
+                    <FormattedMessage id="friendRequests-goHome" defaultMessage="Go Home" />
+                </Link>
             </div>
         </Fragment>
     );

@@ -6,7 +6,7 @@ import UserBadge from "../users/UserBadge";
 import Message from "./Message";
 import { autoScroll } from "../../helpers";
 import uuid from "uuid";
-
+import { FormattedMessage } from "react-intl";
 const ChatMain = ({
     messages,
     participants,
@@ -31,7 +31,9 @@ const ChatMain = ({
                 <div className="chat__main">
                     <div className="chat__messages">
                         <div className="badge">
-                            <h1 className="display display-info">No messages</h1>
+                            <h1 className="display display-info">
+                                <FormattedMessage id="chatMain-No-Messages" defaultMessage="No Messages" />
+                            </h1>
                         </div>
                     </div>
                     <div className="compose">
@@ -44,7 +46,9 @@ const ChatMain = ({
             <div className="chat__main">
                 <div className="chat__messages">
                     <div className="badge">
-                        <h1 className="display display-info">No messages</h1>
+                        <h1 className="display display-info">
+                            <FormattedMessage id="chatMain-No-Messages" defaultMessage="No Messages" />
+                        </h1>
                     </div>
                 </div>
                 <div className="compose">
@@ -62,7 +66,9 @@ const ChatMain = ({
                     <UserBadge userName={currentConversation.groupName} gravatar={currentConversation.avatar} />
                     <div className="chat__messages">
                         <div className="badge">
-                            <h1 className="display display-info">No messages</h1>
+                            <h1 className="display display-info">
+                                <FormattedMessage id="chatMain-No-Messages" defaultMessage="No Messages" />
+                            </h1>
                         </div>
                     </div>
                     <div className="compose">
@@ -77,7 +83,9 @@ const ChatMain = ({
                 <UserBadge userName={contact.name} gravatar={contact.avatar} />
                 <div className="chat__messages">
                     <div className="badge">
-                        <h1 className="display display-info">No messages</h1>
+                        <h1 className="display display-info">
+                            <FormattedMessage id="chatMain-No-Messages" defaultMessage="No Messages" />
+                        </h1>
                     </div>
                 </div>
                 <div className="compose">

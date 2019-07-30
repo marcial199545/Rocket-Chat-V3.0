@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Spinner from "../layout/Spinner";
 import { connect } from "react-redux";
 import { updateProfileSettings } from "../../actions/profile";
+import { FormattedMessage } from "react-intl";
 const ProfileSettings = ({
     user,
     loading,
@@ -45,18 +46,25 @@ const ProfileSettings = ({
                     <img className="user__avatar" src={user && user.avatar} alt="" /> <span> {user && user.name}</span>
                 </p>
             </div>
-            <h1 className="large text-primary">Profile settings</h1>
+            <h1 className="large text-primary">
+                <FormattedMessage id="profileSettings-profileSettings" defaultMessage="Profile Settings" />
+            </h1>
             <p className="lead">
-                <i className="fas fa-user-cog" /> Edit profile settings here
+                <i className="fas fa-user-cog" />{" "}
+                <FormattedMessage id="profileSettings-info" defaultMessage="Edit profile settings here" />
             </p>
             <form onSubmit={e => onSubmit(e)} className="form">
                 <div className="form-group">
                     <select name="language" value={language} onChange={e => onChange(e)}>
-                        <option value="english">English</option>
-                        <option value="deutch">Deutch</option>
-                        <option value="español">Español</option>
+                        <option value="en">English</option>
+                        <option value="de">Deutsche</option>
+                        <option value="es">Español</option>
+                        <option value="ja">日本人</option>
                     </select>
-                    <small className="form-text">Change the language</small>
+                    <small className="form-text">
+                        <FormattedMessage id="profileSettings-info-lang" defaultMessage="Change Language" />{" "}
+                        <i className="fas fa-language" />
+                    </small>
                 </div>
                 <div className="my-2">
                     <button
@@ -64,9 +72,11 @@ const ProfileSettings = ({
                         type="button"
                         className="btn btn-light"
                     >
-                        Add Social Network Links
+                        <FormattedMessage id="profileSettings-add-socials" defaultMessage="Add Social Network Links" />
                     </button>
-                    <span>Optional</span>
+                    <span>
+                        <FormattedMessage id="profileSettings-optional" defaultMessage="Optional" />
+                    </span>
                 </div>
                 {displaySocialInputs && (
                     <Fragment>

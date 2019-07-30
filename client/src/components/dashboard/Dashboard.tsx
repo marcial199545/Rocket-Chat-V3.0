@@ -5,7 +5,7 @@ import User from "../users/User";
 import Chat from "../notification/Chat";
 import PropTypes from "prop-types";
 import { clearMessages } from "../../actions/messages";
-
+import { FormattedMessage } from "react-intl";
 const Dashboard = ({ loading, clearMessages }: { loading?: boolean; clearMessages?: any }) => {
     useEffect(() => {
         clearMessages();
@@ -15,7 +15,9 @@ const Dashboard = ({ loading, clearMessages }: { loading?: boolean; clearMessage
     ) : (
         <Fragment>
             <section className="container container__dashboard">
-                <h1 className="large text-primary">Welcome</h1>
+                <h1 className="large text-primary">
+                    <FormattedMessage id="dash-greeting" defaultMessage="Welcome" />
+                </h1>
                 <div className="user">
                     <User />
                 </div>

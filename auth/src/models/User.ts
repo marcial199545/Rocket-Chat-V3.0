@@ -24,7 +24,7 @@ const UserSchema = new Schema({
     profileSettings: {
         language: {
             type: String,
-            default: "english"
+            default: "en"
         },
         socials: {
             youtube: {

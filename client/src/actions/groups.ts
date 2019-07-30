@@ -1,9 +1,10 @@
-// import { CONTACTS_LOADED, CLEAR_CONTACTS, GROUPS_LOADED, EMPTY_GROUPS } from "./types";
+import { ADD_GROUP, CLEAR_GROUP } from "./types";
 import { setAlert } from "./alert";
 import axios from "axios";
 
-export const addGroupConversation = (socket: any, data: any, history: any) => async (dispatch: any): Promise<void> => {
+export const addGroupConversation = (socket: any, data: any, history?: any) => async (dispatch: any): Promise<void> => {
     try {
+        // eslint-disable-next-line
         let { participants, groupName } = data;
         if (participants.length === 0) {
             return dispatch(setAlert("Add at least one participant", "warning"));
@@ -16,12 +17,40 @@ export const addGroupConversation = (socket: any, data: any, history: any) => as
         ) {
             participants.unshift(currentUserInfo.data);
         }
-        await axios.post("/api/notifications/group/conversation", { participants, groupName });
-        // history.push("/dashboard");
-        // dispatch({
-        //     type: "type",
-        //     payload: "payload"
-        // });
+        await axios.post("/api/notifications/group/conversation", data);
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const addCurrentGroup = (group: any) => async (dispatch: any): Promise<void> => {
+    try {
+        await dispatch({
+            type: ADD_GROUP,
+            payload: group
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const clearCurrentGroup = () => async (dispatch: any): Promise<void> => {
+    try {
+        await dispatch({
+            type: CLEAR_GROUP
+        });
+    } catch (error) {
+        console.log(error);
+    }
+};
+export const editConversationGroup = (socket: any, data: any) => async (dispatch: any): Promise<void> => {
+    try {
+        const { participants, groupName, currentConversation, messages } = data;
+        await axios.put("/api/notifications/group/conversation/edit", data);
+        await axios.post("/api/notifications/group/conversation", {
+            participants,
+            groupName,
+            currentConversation,
+            messages
+        });
     } catch (error) {
         console.log(error);
     }
