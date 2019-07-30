@@ -6,10 +6,9 @@ import PropTypes from "prop-types";
 import { loadContacts } from "../../actions/contacts";
 import { addGroupConversation } from "../../actions/groups";
 import Alert from "../layout/Alert";
-// eslint-disable-next-line
 import { socket } from "../notification/ChatForm";
 import uuid from "uuid";
-// import contacts from "../../reducers/contacts";
+import { FormattedMessage } from "react-intl";
 const AddGroupConversation = ({
     loading,
     user,
@@ -53,7 +52,6 @@ const AddGroupConversation = ({
                 return participant.email === contact.email;
             })
         ) {
-            // @ts-ignore
             setFormData({
                 ...formData,
                 participants: participants.filter((participant: any) => contact.email !== participant.email)
@@ -73,8 +71,12 @@ const AddGroupConversation = ({
                     <img className="user__avatar" src={user && user.avatar} alt="" /> <span> {user && user.name}</span>
                 </p>
             </div>
-            <h1 className="large text-primary">Create a new Group Conversation</h1>
-            <p className="lead">Add Group Participants</p>
+            <h1 className="large text-primary">
+                <FormattedMessage id="addGroup-createGroup" defaultMessage="Create A New Group Conversation" />
+            </h1>
+            <p className="lead">
+                <FormattedMessage id="addGroup-addGroup" defaultMessage="Add Group" />
+            </p>
             <Alert />
             <div className="container__groupConversation">
                 {contacts !== null &&
@@ -102,7 +104,9 @@ const AddGroupConversation = ({
                             );
                         })}
             </div>
-            <h3>Participants:</h3>
+            <h3>
+                <FormattedMessage id="addGroup-participants" defaultMessage="Participants :" />
+            </h3>
             {participants.length > 0 && (
                 <div className="container__participants">
                     {participants.map((participant: any) => {
@@ -130,7 +134,15 @@ const AddGroupConversation = ({
                         onChange={e => onChange(e)}
                         type="text"
                         required
-                        placeholder="Group Name"
+                        placeholder={
+                            user.profileSettings.language === "en" || user === null
+                                ? "Group Name"
+                                : user.profileSettings.language === "es"
+                                ? "Nombre Del Grupo"
+                                : user.profileSettings.language === "de"
+                                ? "Gruppenname"
+                                : "グループ名"
+                        }
                         name="groupName"
                     />
                 </div>

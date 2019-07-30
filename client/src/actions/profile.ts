@@ -25,7 +25,7 @@ export const updateProfileSettings = (formData: any) => async (dispatch: any) =>
             type: UPDATE_PROFILE,
             payload: res.data
         });
-        dispatch(setAlert("Profile Updated", "success"));
+        // dispatch(setAlert("Profile Updated", "success"));
     } catch (error) {
         const errors = error.response.data.errors;
 

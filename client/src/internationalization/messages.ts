@@ -22,7 +22,10 @@ export default defineMessages({
         "friendRequests-noFriends-text": "Sorry, But You Do not Have Any Friend Request",
         "friendRequests-goHome": "Go back To Dashboard",
         "friendRequests-accept": "Accept",
-        "friendRequests-reject": "Reject"
+        "friendRequests-reject": "Reject",
+        "addGroup-createGroup": "Create A New Group Conversation",
+        "addGroup-addGroup": "Add Group",
+        "addGroup-participants": "Participants :"
     },
     de: {
         //@ts-ignore
@@ -46,7 +49,10 @@ export default defineMessages({
         "friendRequests-noFriends-text": "Es tut uns leid, aber Sie haben keine Freundschaftsanfrage",
         "friendRequests-goHome": "geh zurück",
         "friendRequests-accept": "akzeptieren",
-        "friendRequests-reject": "ablehnen"
+        "friendRequests-reject": "ablehnen",
+        "addGroup-createGroup": "Erstellen Sie eine neue Gruppenkonversation",
+        "addGroup-addGroup": "Gruppe hinzufügen",
+        "addGroup-participants": "Gruppenmitglieder :"
     },
     es: {
         //@ts-ignore
@@ -70,7 +76,10 @@ export default defineMessages({
         "friendRequests-noFriends-text": "Lo Sentimos, No Tienes Solicitudes De Amistad",
         "friendRequests-goHome": "Volver a Pagina Principal",
         "friendRequests-accept": "Aceptar",
-        "friendRequests-reject": "Rechazar"
+        "friendRequests-reject": "Rechazar",
+        "addGroup-createGroup": "Crea Una Nueva Conversacion De Grupo",
+        "addGroup-addGroup": "Crea Un Grupo",
+        "addGroup-participants": "Participantes :"
     },
     ja: {
         //@ts-ignore
@@ -94,6 +103,9 @@ export default defineMessages({
         "friendRequests-noFriends-text": "申し訳ありません、友達リクエストはありません",
         "friendRequests-goHome": "家に帰ります",
         "friendRequests-accept": "受け入れる",
-        "friendRequests-reject": "要求を拒否"
+        "friendRequests-reject": "要求を拒否",
+        "addGroup-createGroup": "新しいグループ会話を作成する",
+        "addGroup-addGroup": "グループを追加",
+        "addGroup-participants": "参加者 :"
     }
 });
