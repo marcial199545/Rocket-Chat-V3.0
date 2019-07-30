@@ -9,7 +9,9 @@ export const addContact = (socket: any, email: string) => async (dispatch: any) 
         let contactInfo: any = await axios.post("/api/users/contact", { email });
         let currentUserInfo: any = await axios.get("/api/users/me");
         if (contactInfo.data.contact.email === currentUserInfo.data.email) {
-            return dispatch(setAlert("can not send a request to yourself", "warning"));
+            return dispatch(
+                setAlert("can not send a request to yourself", "warning", "addContact-alert-requestYourself")
+            );
         }
         await axios.post("/api/notifications/add/contact", contactInfo.data);
         let reqDataForFriendRequest = {
@@ -22,7 +24,7 @@ export const addContact = (socket: any, email: string) => async (dispatch: any) 
             }
         };
         await axios.post("/api/notifications/add/contact/request", reqDataForFriendRequest);
-        dispatch(setAlert("Friend Request Sent", "success"));
+        dispatch(setAlert("Friend Request Sent", "success", "addContact-alert-requestSent"));
     } catch (error) {
         const errors = error.response.data.errors;
         if (errors) {
@@ -93,8 +95,8 @@ export const handleFriendRequest = (desicion: string, email: string) => async (d
         dispatch(clearContacts());
         dispatch(loadContacts());
         res.data === "accepted"
-            ? dispatch(setAlert("contact added", "success"))
-            : dispatch(setAlert("contact rejected", "danger"));
+            ? dispatch(setAlert("Contact Added", "success", "addContact-alert-contactAdded"))
+            : dispatch(setAlert("Contact Rejected", "danger", "addContact-alert-contactRejected"));
     } catch (error) {
         console.log(error);
         const errors = error.response.data.errors ? error.response.data.errors : undefined;

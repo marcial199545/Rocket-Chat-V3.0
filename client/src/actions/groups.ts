@@ -7,7 +7,12 @@ export const addGroupConversation = (socket: any, data: any, history?: any) => a
         // eslint-disable-next-line
         let { participants, groupName } = data;
         if (participants.length === 0) {
-            return dispatch(setAlert("Add at least one participant", "warning"));
+            dispatch(setAlert("Add at least one participant", "warning", "addGroup-alert-oneParticipant"));
+            return;
+        }
+        if (groupName.trim().length === 0) {
+            dispatch(setAlert("Please Provide a valid Group Name", "warning", "addGroup-alert-validName"));
+            return;
         }
         let currentUserInfo: any = await axios.get("/api/users/me");
         if (
@@ -18,6 +23,7 @@ export const addGroupConversation = (socket: any, data: any, history?: any) => a
             participants.unshift(currentUserInfo.data);
         }
         await axios.post("/api/notifications/group/conversation", data);
+        history.push("/dashboard");
     } catch (error) {
         console.log(error);
     }

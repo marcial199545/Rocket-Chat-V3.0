@@ -16,7 +16,7 @@ export const joinRoom = (socket: any, roomId: any) => async (dispatch: any) => {
         await socket.emit(SOCKET_JOIN_ROOM, roomId);
         socket.removeAllListeners();
         socket.on("ROOM_JOINED", (data: any) => {
-            dispatch(setAlert(`User joined`, "success"));
+            dispatch(setAlert(`User joined`, "success", "socket-alert-socketJoined"));
         });
     } catch (error) {
         console.log(error);

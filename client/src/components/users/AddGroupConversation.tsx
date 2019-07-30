@@ -39,7 +39,6 @@ const AddGroupConversation = ({
         e.preventDefault();
         addGroupConversation(socket, { participants, groupName }, history);
         setFormData({ groupName: "", participants });
-        history.push("/dashboard");
     };
 
     const onChange = (e: ChangeEvent<HTMLInputElement>) =>
