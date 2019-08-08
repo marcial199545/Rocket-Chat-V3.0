@@ -84,7 +84,9 @@ export const logout = (socket?: any) => async (dispatch: any) => {
         dispatch({
             type: CLEAR_MESSAGES
         });
-        socket.disconnect();
+        if (socket) {
+            socket.disconnect();
+        }
     } catch (error) {
         console.log(error);
     }

@@ -11,7 +11,6 @@ const router = Router();
 // @route   POST api/auth
 // @desc    Authenticate user and get token
 // @access  Public
-
 router.post(
     "/",
     [

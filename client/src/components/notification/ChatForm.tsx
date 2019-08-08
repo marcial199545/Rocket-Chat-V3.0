@@ -51,15 +51,15 @@ const ChatForm = ({
                     value={message}
                     onChange={e => onChange(e)}
                     type="text"
-                    placeholder={
-                        user.profileSettings.language === "en" || user === null
-                            ? "message"
-                            : user.profileSettings.language === "es"
-                            ? "mensaje"
-                            : user.profileSettings.language === "de"
-                            ? "Natchricth"
-                            : "メッセージ"
-                    }
+                    // placeholder={
+                    //     user === null || user.profileSettings.language === "en"
+                    //         ? "message"
+                    //         : user.profileSettings.language === "es"
+                    //         ? "mensaje"
+                    //         : user.profileSettings.language === "de"
+                    //         ? "Natchricth"
+                    //         : "メッセージ"
+                    // }
                     name="message"
                 />
                 {currentRoom && (
